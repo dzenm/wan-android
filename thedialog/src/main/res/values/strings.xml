@@ -1,0 +1,24 @@
+<resources>
+
+    <!--字符串-->
+    <string name="app_name">TheDialog</string>
+
+    <string name="dialog_info">提示</string>
+
+    <string name="dialog_btn_cancel">取消</string>
+    <string name="dialog_btn_confirm">确定</string>
+
+    <string name="dialog_loading">正在加载</string>
+
+    <string name="dialog_up_grade">升级</string>
+
+    <!--颜色-->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorLightGray">#EFEFEF</color>
+    <color name="colorGray">#DEDEDE</color>
+    <color name="colorDarkGray">#757575</color>
+    <color name="colorLightBlack">#212121</color>
+
+    <!--带透明度的颜色-->
+    <color name="colorFFLightBlack">#70212121</color>
+</resources>

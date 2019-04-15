@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadProgress">
+
+        <attr name="textSize" format="dimension" />
+
+        <attr name="height" format="dimension" />
+
+        <attr name="maxValue" format="integer" />
+
+        <attr name="isStatic" format="boolean" />
+
+        <attr name="lineHeight" format="dimension" />
+
+        <attr name="loadColor" format="color" />
+
+    </declare-styleable>
+</resources>

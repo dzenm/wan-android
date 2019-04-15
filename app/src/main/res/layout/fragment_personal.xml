@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.PersonalFragment">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_line"
+            android:background="@color/colorLightGray"
+            app:layout_constraintBottom_toTopOf="@+id/id_layout" />
+
+
+    <LinearLayout
+            android:id="@+id/id_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_margin_16dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_padding_12dp"
+                android:text="@string/person_text_id_tip" />
+
+        <TextView
+                android:id="@+id/id_card"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/activity_margin_16dp"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_right"
+                android:drawablePadding="@dimen/activity_padding_8dp"
+                android:gravity="right|center_vertical"
+                android:padding="@dimen/activity_padding_12dp"
+                android:text="@string/person_text_id" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/username_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/id_layout">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_margin_16dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_padding_12dp"
+                android:text="@string/person_text_username_tip" />
+
+        <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/activity_margin_16dp"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_right"
+                android:drawablePadding="@dimen/activity_padding_8dp"
+                android:gravity="right|center_vertical"
+                android:padding="@dimen/activity_padding_12dp"
+                android:text="@string/person_text_username" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_layout">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/activity_margin_16dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_padding_12dp"
+                android:text="@string/person_text_email_tip" />
+
+        <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/activity_margin_16dp"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_right"
+                android:drawablePadding="@dimen/activity_padding_8dp"
+                android:gravity="right|center_vertical"
+                android:padding="@dimen/activity_padding_12dp"
+                android:text="@string/person_text_email" />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/collect"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableRight="@drawable/ic_right"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_margin_28dp"
+            android:paddingRight="@dimen/activity_margin_28dp"
+            android:text="@string/person_text_collect"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_layout" />
+
+    <TextView
+            android:id="@+id/about"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableRight="@drawable/ic_right"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_margin_28dp"
+            android:paddingRight="@dimen/activity_margin_28dp"
+            android:text="@string/person_text_about"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/collect" />
+
+    <TextView
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableRight="@drawable/ic_right"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_margin_28dp"
+            android:paddingRight="@dimen/activity_margin_28dp"
+            android:text="@string/person_text_logout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/about" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_line"
+            android:background="@color/colorLightGray"
+            app:layout_constraintTop_toBottomOf="@+id/logout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
