@@ -3,6 +3,7 @@ package com.din.helper.permission;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.nfc.Tag;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class PermissionManager {
+
+    private static final String TAG = PermissionManager.class.getSimpleName();
 
     public static final int REQUEST_CODE = 1;
 
@@ -46,7 +49,6 @@ public final class PermissionManager {
 
     /**
      * 设置activity
-     *
      * @param activity
      * @return
      */
@@ -57,7 +59,6 @@ public final class PermissionManager {
 
     /**
      * 请求权限模式
-     *
      * @param requestMode
      * @return
      */
@@ -68,7 +69,6 @@ public final class PermissionManager {
 
     /**
      * 请求的权限列表
-     *
      * @param permissions
      * @return
      */
@@ -78,8 +78,18 @@ public final class PermissionManager {
     }
 
     /**
+     * 请求的权限列表
+     * @param permissions
+     * @return
+     */
+    public PermissionManager load(List<String> permissions) {
+        this.permissions = onFilterPermission((String[]) permissions.toArray());                  // 过滤未授予的请求
+        return this;
+    }
+
+
+    /**
      * 权限请求回掉处理
-     *
      * @param onPermissionListener
      * @return
      */
@@ -90,7 +100,6 @@ public final class PermissionManager {
 
     /**
      * 请求权限
-     *
      * @return
      */
     public PermissionManager requestPermission() {
@@ -106,7 +115,6 @@ public final class PermissionManager {
 
     /**
      * 权限处理结果（重写onRequestPermissionsResult方法，并调用该方法）
-     *
      * @param permissions
      * @param grantResults
      */
@@ -141,13 +149,12 @@ public final class PermissionManager {
     private PermissionManager requestSuccess() {
         onPermissionListener.onPermit(true);
 //        FileHelper.getInstance().init(activity);                        // 文件夹初始化
-//        LogHelper.getInstance().start();                                // Logcat初始化
+//        Logger.getInstance().start();                                // Logcat初始化
         return this;
     }
 
     /**
      * 过滤未授予的权限
-     *
      * @param permissions
      * @return
      */
@@ -163,7 +170,6 @@ public final class PermissionManager {
 
     /**
      * 打开设置权限的对话框
-     *
      * @param message
      */
     private PermissionManager openSettingDialog(String message) {
@@ -191,7 +197,6 @@ public final class PermissionManager {
 
     /**
      * 打开未授予权限的对话框
-     *
      * @param message
      */
     private PermissionManager openFaildDialog(String message) {

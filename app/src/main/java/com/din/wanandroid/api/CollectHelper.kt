@@ -9,6 +9,9 @@ import rx.schedulers.Schedulers
 
 object CollectHelper {
 
+    /**
+     * 收藏
+     */
     fun collect(context: Context, id: Int) {
         Api.getRetrofit()
             .create(CollectApi::class.java)
@@ -33,6 +36,9 @@ object CollectHelper {
             })
     }
 
+    /**
+     * 取消收藏
+     */
     fun uncollect(context: Context, id: Int) {
         Api.getRetrofit()
             .create(CollectApi::class.java)

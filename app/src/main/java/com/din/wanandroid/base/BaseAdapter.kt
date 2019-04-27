@@ -21,7 +21,7 @@ abstract class BaseAdapter<T : Any> : RecyclerView.Adapter<RecyclerView.ViewHold
         const val LOAD_STATUS_END = 3               // 加载的状态为全部加载完
     }
 
-    var bean: MutableList<T> = arrayListOf()        // list数据源
+    var beans: MutableList<T> = arrayListOf()       // list数据源
 
     var loadStatus = 0                              // 加载的状态标志位
 

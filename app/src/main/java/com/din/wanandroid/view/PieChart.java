@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.Nullable;
-import com.din.thedialog.util.Res;
+import com.din.thedialog.Res;
 
 public class PieChart extends View {
 

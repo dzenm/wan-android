@@ -1,7 +1,7 @@
 package com.din.wanandroid.activities
 
 import android.app.Application
-import com.din.helper.base.CrashHandler
+import com.din.helper.log.CrashHandler
 
 class App : Application() {
 

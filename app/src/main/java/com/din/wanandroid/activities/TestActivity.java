@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import com.din.thedialog.*;
-import com.din.thedialog.view.LoadProgress;
+import com.din.thedialog.LoadProgress;
 import com.din.wanandroid.R;
 import com.din.wanandroid.databinding.ActivityTestBinding;
 
@@ -36,7 +36,7 @@ public class TestActivity extends AppCompatActivity {
                             }
                         }
                     })
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn2) {
             InfoDialog.newInstance(this)
                     .setContent("是否打开")
@@ -52,7 +52,7 @@ public class TestActivity extends AppCompatActivity {
                     })
                     .setMargin(10)
                     .setGravity(Gravity.BOTTOM)
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn3) {
             InfoDialog.newInstance(this)
                     .setContent("是否打开")
@@ -67,7 +67,7 @@ public class TestActivity extends AppCompatActivity {
                         }
                     })
                     .setGravity(Gravity.TOP)
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn4) {
             EditDialog.newInstance(this)
                     .setInfo("测试")
@@ -82,7 +82,7 @@ public class TestActivity extends AppCompatActivity {
                             }
                         }
                     })
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn5) {
             EditDialog.newInstance(this)
                     .setInfo("测试")
@@ -98,7 +98,7 @@ public class TestActivity extends AppCompatActivity {
                         }
                     })
                     .setGravity(Gravity.BOTTOM)
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn6) {
             EditDialog.newInstance(this)
                     .setInfo("测试")
@@ -114,7 +114,7 @@ public class TestActivity extends AppCompatActivity {
                         }
                     })
                     .setGravity(Gravity.TOP)
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn7) {
             final String[] texts = new String[]{"测试1", "测试2", "测试3", "测试4", "测试1", "测试2", "测试3", "测试4"};
             ListDialog.newInstance(this).setData(texts)
@@ -124,7 +124,7 @@ public class TestActivity extends AppCompatActivity {
                             Toast.makeText(TestActivity.this, texts[position] + ": " + position, Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn8) {
             final String[] texts = new String[]{"测试1", "测试2", "测试3", "测试4", "测试1", "测试2", "测试3", "测试4"};
             ListDialog.newInstance(this).setData(texts)
@@ -135,7 +135,7 @@ public class TestActivity extends AppCompatActivity {
                         }
                     })
                     .setGravity(Gravity.BOTTOM)
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn9) {
             final String[] texts = new String[]{"测试1", "测试2", "测试3", "测试4", "测试1", "测试2", "测试3", "测试4"};
             ListDialog.newInstance(this).setData(texts)
@@ -146,7 +146,7 @@ public class TestActivity extends AppCompatActivity {
                         }
                     })
                     .setGravity(Gravity.TOP)
-                    .apply();
+                    .build();
         } else if (view.getId() == R.id.btn11) {
             PromptDialog.newInstance(this)
                     .showLoadingPoint();
@@ -193,7 +193,7 @@ public class TestActivity extends AppCompatActivity {
                             Toast.makeText(TestActivity.this, "升级完成，进行安装", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .apply();
+                    .build();
         }
     }
 
@@ -204,7 +204,7 @@ public class TestActivity extends AppCompatActivity {
     //循环模拟下载过程
     public void start() {
         if (current <= max) {
-            l.setValue(current);
+            l.setCurrentValue(current);
             handler.postDelayed(runnable, 100);
         } else {
             current = 0;

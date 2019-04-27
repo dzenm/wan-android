@@ -1,6 +1,6 @@
 package com.din.wanandroid.api
 
-import com.din.wanandroid.model.ArticleModel
+import com.din.wanandroid.model.CollectModel
 import com.din.wanandroid.model.SuccessModel
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -16,5 +16,5 @@ interface CollectApi {
     fun uncollectArticle(@Path("id") id: String): Observable<SuccessModel>
 
     @GET("lg/collect/list/{id}/json")
-    fun getCollects(@Path("id") id: String): Observable<ArticleModel>
+    fun getCollects(@Path("id") id: String): Observable<CollectModel>
 }

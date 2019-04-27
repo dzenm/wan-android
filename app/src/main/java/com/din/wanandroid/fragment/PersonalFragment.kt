@@ -1,11 +1,7 @@
 package com.din.wanandroid.fragment
 
 import android.content.Intent
-import android.os.Bundle
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -25,19 +21,19 @@ import retrofit2.Response
 
 class PersonalFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_personal, container, false)
+    override fun layoutId(): Int = R.layout.fragment_personal
 
-        val id_card = view.findViewById<TextView>(R.id.id_card)
-        val username = view.findViewById<TextView>(R.id.username)
-        val email = view.findViewById<TextView>(R.id.email)
+    override fun lazyPrepareFetchData() {
+        val id_card = rootView.findViewById<TextView>(R.id.id_card)
+        val username = rootView.findViewById<TextView>(R.id.username)
+        val email = rootView.findViewById<TextView>(R.id.email)
 
-        val id_layout = view.findViewById<LinearLayout>(R.id.id_layout)
-        val username_layout = view.findViewById<LinearLayout>(R.id.username_layout)
-        val email_layout = view.findViewById<LinearLayout>(R.id.email_layout)
-        val collect = view.findViewById<TextView>(R.id.collect)
-        val about = view.findViewById<TextView>(R.id.about)
-        val logout = view.findViewById<TextView>(R.id.logout)
+        val id_layout = rootView.findViewById<LinearLayout>(R.id.id_layout)
+        val username_layout = rootView.findViewById<LinearLayout>(R.id.username_layout)
+        val email_layout = rootView.findViewById<LinearLayout>(R.id.email_layout)
+        val collect = rootView.findViewById<TextView>(R.id.collect)
+        val about = rootView.findViewById<TextView>(R.id.about)
+        val logout = rootView.findViewById<TextView>(R.id.logout)
 
         id_layout.setOnClickListener { }
         username_layout.setOnClickListener { }
@@ -87,12 +83,6 @@ class PersonalFragment : BaseFragment() {
         if (!TextUtils.isEmpty(user)) {
             username.setText(user)
         }
-
-        return view
-    }
-
-    override fun initData() {
-
     }
 
     /**

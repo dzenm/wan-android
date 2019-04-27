@@ -1,10 +1,7 @@
 package com.din.wanandroid.fragment
 
 import android.app.Activity
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,11 +15,6 @@ open abstract class RecycleFragment : BaseFragment() {
     protected var page: Int = 0                           // 加载的页数
 
     /**
-     * layout Id
-     */
-    abstract fun layoutId(): Int
-
-    /**
      * 滑动到最后一个可见的item
      */
     abstract fun scrollToLastVisibleItem(lastPosition: Int)
@@ -32,9 +24,6 @@ open abstract class RecycleFragment : BaseFragment() {
      */
     abstract fun swipeToRefresh()
 
-    /**
-     * create view initial some view
-     */
     abstract fun onAfterCreateView(view: View)
 
     /**
@@ -42,8 +31,10 @@ open abstract class RecycleFragment : BaseFragment() {
      */
     abstract fun setAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootView = inflater.inflate(layoutId(), container, false)
+    /**
+     * create view initial some view
+     */
+    override fun initiatedView() {
         val recycler_view = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         val swipe_refresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
 
@@ -56,7 +47,6 @@ open abstract class RecycleFragment : BaseFragment() {
 
         // initial data
         onViewListener(recycler_view, swipe_refresh)
-        return rootView
     }
 
     /**
@@ -82,6 +72,4 @@ open abstract class RecycleFragment : BaseFragment() {
             swipeToRefresh()
         }
     }
-
-    abstract override fun initData()
 }

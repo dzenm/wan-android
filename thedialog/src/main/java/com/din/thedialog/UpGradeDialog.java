@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import com.din.thedialog.util.AnimatorHelper;
-import com.din.thedialog.view.LoadProgress;
 
 public class UpGradeDialog extends BaseDialog implements View.OnClickListener, LoadProgress.OnLoadListener {
 
@@ -110,7 +108,7 @@ public class UpGradeDialog extends BaseDialog implements View.OnClickListener, L
     }
 
     @Override
-    protected BaseDialog initDialogSize() { // 设置Dialog的宽度
+    protected BaseDialog setDialogSize() { // 设置Dialog的宽度
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         layoutParams.width = (int) (getDisplayWidth() * 0.7);
         view.setLayoutParams(layoutParams);
@@ -131,8 +129,8 @@ public class UpGradeDialog extends BaseDialog implements View.OnClickListener, L
 
     @Override
     public void onFinished() {
-        dismiss();
         onUpGradeListener.onFinished();
+        dismiss();
     }
 
     public interface OnUpGradeListener {

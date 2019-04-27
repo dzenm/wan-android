@@ -62,7 +62,7 @@
                 android:text="@string/dialog_up_grade"
                 android:textColor="@android:color/white" />
 
-        <com.din.thedialog.view.LoadProgress
+        <com.din.thedialog.LoadProgress
                 android:id="@+id/load_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

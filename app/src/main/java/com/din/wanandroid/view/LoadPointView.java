@@ -11,6 +11,10 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import androidx.annotation.Nullable;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +69,6 @@ public class LoadPointView extends View implements ValueAnimator.AnimatorUpdateL
             canvas.drawCircle(cx, mPointCy, mRadius, mPaint);
         }
     }
-
 
     private ValueAnimator newValueAnimator() {
         ValueAnimator anim = ObjectAnimator.ofFloat(1.0f);

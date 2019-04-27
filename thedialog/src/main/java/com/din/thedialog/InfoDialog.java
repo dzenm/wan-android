@@ -11,8 +11,19 @@ import androidx.annotation.NonNull;
 
 public class InfoDialog extends BaseDialog implements View.OnClickListener {
 
+    /*
+     * 提示框的标题
+     */
     private TextView tv_info;
+
+    /*
+     * 提示框的内容
+     */
     protected EditText et_content;
+
+    /*
+     * 提示框可点击的按钮
+     */
     protected Button bt_positive, bt_negative;
     private OnDialogClickListener onDialogClickListener;
 
@@ -57,7 +68,7 @@ public class InfoDialog extends BaseDialog implements View.OnClickListener {
     }
 
     /**
-     * 设置左边的按钮的文本
+     * 设置按钮的文本
      * @param positiveText
      * @param negativeText
      * @return

@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-import com.din.thedialog.util.Res;
+import com.din.thedialog.Res;
 
 /**
  * @author dinzhenyan

@@ -14,6 +14,8 @@ import android.util.Log;
  */
 public final class MobileSetting {
 
+    private static final String TAG = MobileSetting.class.getSimpleName();
+
     private static final String HUAWEI_PACKAGE = "com.huawei.systemmanager";
     private static final String HUAWEI_UI_PERMISSION = "com.huawei.permissionmanager.ui.MainActivity";
     private static final String HUAWEI_UI_SYSTEM = "com.huawei.systemmanager.addviewmonitor.AddViewMonitorActivity";
@@ -147,7 +149,7 @@ public final class MobileSetting {
         if (isNewTask) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        Log.d("DZY", "mark: " + mark());
+        Log.d(TAG, "mark: " + mark());
         activity.startActivityForResult(intent, PermissionManager.REQUEST_CODE);
     }
 

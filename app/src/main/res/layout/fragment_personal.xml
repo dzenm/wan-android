@@ -10,16 +10,12 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_line"
-            android:background="@color/colorLightGray"
-            app:layout_constraintBottom_toTopOf="@+id/id_layout" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <LinearLayout
             android:id="@+id/id_layout"

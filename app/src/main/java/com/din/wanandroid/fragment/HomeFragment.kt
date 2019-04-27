@@ -9,7 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.din.banner.BannerHelper
+import com.din.banner.ScrollerPage
 import com.din.wanandroid.R
 import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.ArticleAdapter
@@ -31,7 +31,7 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
     private var bannerUrls: MutableList<String> = mutableListOf()
     private var bannerImages: MutableList<String> = mutableListOf()
 
-    private lateinit var bannerHelper: BannerHelper
+    private lateinit var scrollerPage: ScrollerPage
     private lateinit var coordinator_layout: CoordinatorLayout
     private var isFirstStart = true
 
@@ -42,15 +42,21 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
     override fun onAfterCreateView(view: View) {
         val search_view = view.findViewById<SearchView>(R.id.search_view)
 
-        val viewPager = view.findViewById(R.id.view_pager) as ViewPager
-        val layout = view.findViewById(R.id.dot_layout) as LinearLayout
-        val dot = view.findViewById(R.id.dot) as ImageView
+        val viewPager = view.findViewById(R.id.viewPager) as ViewPager
+        val ll_point = view.findViewById(R.id.ll_point) as LinearLayout
+        val iv_point = view.findViewById(R.id.iv_point) as ImageView
         coordinator_layout = view.findViewById(R.id.coordinator_layout)
 
         // Banner图初始化
-        bannerHelper = BannerHelper.getInstance()
+        scrollerPage = ScrollerPage()
             .with(activity)
-            .init(viewPager, layout, dot)
+            .init(viewPager, ll_point, iv_point)
+            .setItemClickListener {
+                val intent = Intent(activity, WebActivity::class.java)
+                intent.putExtra("title", bannerUrls.get(it))
+                intent.putExtra("url", bannerUrls.get(it))
+                startActivity(intent)
+            }
 
         // RecyclerView Adapter initial
         adapter.setOnItemClickListener(this)
@@ -59,8 +65,8 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
         search_view.setIconifiedByDefault(false)     // 设置搜索框直接展开显示。左侧有放大镜(在搜索框外) 右侧无叉叉 有输入内容后有叉叉 不能关闭搜索框
         search_view.queryHint = getString(R.string.search_query_hint)   // 设置输入框提示语
         search_view.setOnQueryTextListener(this)
-        initData()
         isFirstStart = false
+        fetchData()
     }
 
     override fun scrollToLastVisibleItem(lastPosition: Int) {
@@ -72,10 +78,7 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
         fetchListData(0, false)
     }
 
-    override fun initData() {
-        if (!isFirstStart) {
-            return
-        }
+    fun fetchData() {
         // 获取banner图
         Api.getRetrofit()
             .create(HomeApi::class.java)
@@ -93,7 +96,7 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
                             bannerImages.add(datas.get(i).imagePath)
                             bannerUrls.add(datas.get(i).url)
                         }
-                        bannerHelper.setImage(bannerImages.toTypedArray()).start()
+                        scrollerPage.setImage(bannerImages.toTypedArray()).start()
                         fetchListData(0, false)
                     }
                 }
@@ -162,7 +165,7 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
                         if (isLoadMore) {
                             adapter.addData(datas, lastPostion)
                         } else {
-                            adapter.bean = datas
+                            adapter.beans = datas
                             adapter.notifyDataSetChanged()
                             coordinator_layout.visibility = View.VISIBLE
                         }

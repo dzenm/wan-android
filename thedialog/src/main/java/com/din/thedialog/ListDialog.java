@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import com.din.thedialog.util.AnimatorHelper;
-import com.din.thedialog.util.ListAdapter;
 
 public class ListDialog extends BaseDialog implements AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -76,9 +74,9 @@ public class ListDialog extends BaseDialog implements AdapterView.OnItemClickLis
     }
 
     @Override
-    public BaseDialog apply() {
+    public BaseDialog build() {
         animator = AnimatorHelper.shrink();
-        super.apply();
+        super.build();
         lv_list.setBackgroundResource(background);
         view.setBackground(null);                   // 设置不必要的背景
         if (isIcon) {                               // 设置数据

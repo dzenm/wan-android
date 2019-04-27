@@ -37,7 +37,7 @@
                         android:layout_height="match_parent">
 
                     <androidx.viewpager.widget.ViewPager
-                            android:id="@+id/view_pager"
+                            android:id="@+id/viewPager"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
 
@@ -46,19 +46,18 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="20dp">
+                            android:layout_marginBottom="10dp">
 
                         <LinearLayout
-                                android:id="@+id/dot_layout"
+                                android:id="@+id/ll_point"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal" />
 
                         <ImageView
-                                android:id="@+id/dot"
+                                android:id="@+id/iv_point"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:contentDescription="@android:string/emptyPhoneNumber"
                                 android:src="@drawable/select" />
                     </RelativeLayout>
                 </RelativeLayout>

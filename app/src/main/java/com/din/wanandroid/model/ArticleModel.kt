@@ -1,8 +1,10 @@
 package com.din.wanandroid.model
 
+import com.din.wanandroid.base.BaseModel
+
 data class ArticleModel(
     var data: Data, var errorCode: Int, var errorMsg: String
-) {
+) : BaseModel {
     data class Data(
         var curPage: Int, var datas: MutableList<Datas>, var offset: Int, var over: Boolean,
         var pageCount: Int, var size: Int, var total: Int

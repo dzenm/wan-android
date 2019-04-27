@@ -1,6 +1,8 @@
 package com.din.wanandroid.model
 
-data class TopModel(var data: MutableList<Data>, var errorCode: Int, var errorMsg: String) {
+import com.din.wanandroid.base.BaseModel
+
+data class TopModel(var data: MutableList<Data>, var errorCode: Int, var errorMsg: String) : BaseModel {
     data class Data(
         var apkLink: String, var author: String, var chapterId: Int, var chapterName: String,
         var collect: Boolean, var courseId: Int, var desc: String, var envelopePic: String,

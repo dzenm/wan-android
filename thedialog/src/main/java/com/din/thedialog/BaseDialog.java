@@ -2,18 +2,17 @@ package com.din.thedialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
-import com.din.thedialog.util.AnimatorHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
@@ -143,7 +142,7 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * Dialog矩形背景
      * @return
      */
-    public BaseDialog<T> rectangleBackground() {
+    public BaseDialog<T> setBackgroundRectangle() {
         this.setBackground(Color.WHITE);
         return this;
     }
@@ -153,7 +152,7 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * @param isTranslucent
      * @return
      */
-    public BaseDialog<T> isTranslucent(boolean isTranslucent) {
+    public BaseDialog<T> setTranslucent(boolean isTranslucent) {
         this.isTranslucent = isTranslucent;
         return this;
     }
@@ -165,23 +164,12 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * 其他有关View的操作在 super.apply() 之后调用
      * @return
      */
-    public BaseDialog<T> apply() {
-        initDialogSize();
-        initDefault();
-        getWindow().setGravity(gravity);                                   // 显示的位置
-        getWindow().setWindowAnimations(animator);                         // 窗口动画
-        view.setBackgroundResource(background);
+    public BaseDialog<T> build() {
+        setDialogSize();
+        setStyle();
+        setWindowProperty();
         show();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);  // 解决ALertDialog无法弹出软键盘,且必须放在AlertDialog的show方法之后
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);  // 收起键盘
-        if (isTranslucent) {    // 消除Dialog内容区域外围的灰色
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                getWindow().setDimAmount(0);
-            } else {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            }
-        }
+        afterShowSetting();
         return this;
     }
 
@@ -210,7 +198,7 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
     /**
      * 设置默认的效果
      */
-    protected void initDefault() {
+    protected BaseDialog<T> setStyle() {
         if (isDefaultMargin) {
             if (gravity == Gravity.TOP) {
                 if (isDefaultBackground) {
@@ -229,6 +217,7 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
                 animator = getBottomAnimator();
             }
         }
+        return this;
     }
 
     @Override
@@ -243,13 +232,37 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * 初始化dialog的大小
      * @return
      */
-    protected BaseDialog initDialogSize() {
+    protected BaseDialog<T> setDialogSize() {
         if (!isCenter) {
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            lp.width = getDisplayWidth() - dp2dip(2 * margin);
-            lp.bottomMargin = dp2dip(margin);
-            lp.topMargin = dp2dip(8 * margin);
+            lp.width = getDisplayWidth() - dp2px(2 * margin);
+            lp.bottomMargin = dp2px(margin);
+            lp.topMargin = dp2px(8 * margin);
             view.setLayoutParams(lp);
+        }
+        return this;
+    }
+
+    protected BaseDialog<T> setWindowProperty() {
+        Window window = getWindow();
+        window.setGravity(gravity);                                   // 显示的位置
+        window.setWindowAnimations(animator);                         // 窗口动画
+        view.setBackgroundResource(background);
+        return this;
+    }
+
+    protected BaseDialog<T> afterShowSetting() {
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);  // 解决ALertDialog无法弹出软键盘,且必须放在AlertDialog的show方法之后
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);  // 收起键盘
+
+        if (isTranslucent) {    // 消除Dialog内容区域外围的灰色
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                window.setDimAmount(0);
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            }
         }
         return this;
     }
@@ -275,9 +288,8 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * @param value
      * @return
      */
-    protected int dp2dip(int value) {
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, metrics);
+    protected int dp2px(int value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, Resources.getSystem().getDisplayMetrics());
     }
 
     /**
@@ -285,7 +297,7 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * @return
      */
     protected int getDisplayWidth() {
-        return getContext().getResources().getDisplayMetrics().widthPixels;
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
     /**
@@ -293,7 +305,7 @@ public abstract class BaseDialog<T extends BaseDialog> extends AlertDialog {
      * @return
      */
     protected int getDisplayHeight() {
-        return getContext().getResources().getDisplayMetrics().heightPixels;
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     public interface OnDialogClickListener<T extends BaseDialog> {

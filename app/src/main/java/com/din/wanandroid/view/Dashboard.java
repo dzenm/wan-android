@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
-import com.din.thedialog.util.Res;
+import com.din.thedialog.Res;
 
 /**
  * @author dinzhenyan

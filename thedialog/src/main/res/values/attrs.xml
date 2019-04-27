@@ -4,15 +4,15 @@
 
         <attr name="textSize" format="dimension" />
 
-        <attr name="height" format="dimension" />
+        <attr name="totalHeight" format="dimension" />
 
         <attr name="maxValue" format="integer" />
 
-        <attr name="isStatic" format="boolean" />
+        <attr name="textStatic" format="boolean" />
 
         <attr name="lineHeight" format="dimension" />
 
-        <attr name="loadColor" format="color" />
+        <attr name="lineColor" format="color" />
 
     </declare-styleable>
 </resources>

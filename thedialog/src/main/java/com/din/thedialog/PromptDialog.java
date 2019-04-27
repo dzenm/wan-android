@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import com.din.thedialog.util.AnimatorHelper;
 
 import java.util.TimerTask;
 
@@ -52,7 +51,7 @@ public class PromptDialog extends BaseDialog {
      * @return
      */
     public PromptDialog showSuccess(String success) {
-        this.setDialog(success, R.drawable.prompt_bg_success, true, false);
+        setDialog(success, R.drawable.prompt_bg_success, true, false);
         return this;
     }
 
@@ -62,7 +61,7 @@ public class PromptDialog extends BaseDialog {
      * @return
      */
     public PromptDialog showError(String error) {
-        this.setDialog(error, R.drawable.prompt_bg_error, true, false);
+        setDialog(error, R.drawable.prompt_bg_error, true, false);
         return this;
     }
 
@@ -72,7 +71,7 @@ public class PromptDialog extends BaseDialog {
      * @return
      */
     public PromptDialog showWarming(String warming) {
-        this.setDialog(warming, R.drawable.prompt_bg_warming, true, false);
+        setDialog(warming, R.drawable.prompt_bg_warming, true, false);
         return this;
     }
 
@@ -82,7 +81,7 @@ public class PromptDialog extends BaseDialog {
      * @return
      */
     public PromptDialog showRefresh(String refresh) {
-        this.setDialog(refresh, R.drawable.prompt_bg_refresh, true, false);
+        setDialog(refresh, R.drawable.prompt_bg_refresh, true, false);
         return this;
     }
 
@@ -91,7 +90,7 @@ public class PromptDialog extends BaseDialog {
      * @return
      */
     public PromptDialog showLoading() {
-        this.setDialog(getContext().getResources().getString(R.string.dialog_loading), R.drawable.prompt_bg_loading_sun, false, true);
+        setDialog(getContext().getResources().getString(R.string.dialog_loading), R.drawable.prompt_bg_loading_sun, false, true);
         return this;
     }
 
@@ -101,7 +100,7 @@ public class PromptDialog extends BaseDialog {
      */
     public PromptDialog showLoadingPoint() {
         isShowBrief = false;
-        this.setDialog(getContext().getResources().getString(R.string.dialog_loading), R.drawable.prompt_bg_loading_point, false, true);
+        setDialog(getContext().getResources().getString(R.string.dialog_loading), R.drawable.prompt_bg_loading_point, false, true);
         return this;
     }
 
@@ -132,7 +131,7 @@ public class PromptDialog extends BaseDialog {
         setImageResourceType(ic);
         isShowBrief = brief;
         isCancel = cancel;
-        apply();
+        build();
         return this;
     }
 
@@ -146,10 +145,10 @@ public class PromptDialog extends BaseDialog {
     }
 
     @Override
-    public BaseDialog apply() {
-        super.apply();
-        setCancelable(isCancel);
-        if (isShowBrief) {
+    public BaseDialog build() {
+        super.build();
+        setCancelable(isCancel);                                        // 设置不可通过返回键取消dialog
+        if (isShowBrief) {                                              // 是否简短的显示之后取消
             if (timeTask == null) {
                 timeTask = new TimeTask(DEFAULT_DELAY, new TimerTask() {
                     @Override
@@ -189,18 +188,18 @@ public class PromptDialog extends BaseDialog {
      */
     protected void setImageResourceType(int icon) {
         ViewGroup.LayoutParams layoutParams = iv_icon.getLayoutParams();
-        layoutParams.width = dp2dip(DEFAULT_SIZE);
-        layoutParams.height = dp2dip(DEFAULT_SIZE);
+        layoutParams.width = dp2px(DEFAULT_SIZE);
+        layoutParams.height = dp2px(DEFAULT_SIZE);
         iv_icon.setLayoutParams(layoutParams);
         iv_icon.setImageResource(icon);
         ((Animatable) iv_icon.getDrawable()).start();
     }
 
     @Override
-    protected PromptDialog initDialogSize() {
+    protected PromptDialog setDialogSize() {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        layoutParams.bottomMargin = dp2dip(margin);
-        layoutParams.topMargin = dp2dip(8 * margin);
+        layoutParams.bottomMargin = dp2px(margin);
+        layoutParams.topMargin = dp2px(8 * margin);
         view.setLayoutParams(layoutParams);
         return this;
     }

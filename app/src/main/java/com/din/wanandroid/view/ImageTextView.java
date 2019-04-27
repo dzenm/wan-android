@@ -6,7 +6,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
-import com.din.thedialog.util.Res;
+import com.din.thedialog.Res;
 import com.din.wanandroid.R;
 
 /**

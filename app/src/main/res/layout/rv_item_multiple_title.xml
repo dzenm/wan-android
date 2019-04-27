@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_padding_20dp"
+        android:paddingTop="@dimen/activity_padding_8dp"
+        android:paddingRight="@dimen/activity_padding_20dp"
+        android:paddingBottom="@dimen/activity_padding_8dp">
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="@dimen/activity_padding_20dp"
+            android:layout_toLeftOf="@+id/more"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/activity_padding_12dp"
+            android:paddingTop="@dimen/activity_padding_8dp"
+            android:paddingRight="@dimen/activity_padding_12dp"
+            android:paddingBottom="@dimen/activity_padding_8dp" />
+
+    <TextView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingLeft="@dimen/activity_padding_12dp"
+            android:paddingTop="@dimen/activity_padding_8dp"
+            android:paddingRight="@dimen/activity_padding_12dp"
+            android:paddingBottom="@dimen/activity_padding_8dp"
+            android:text="@string/item_text_more" />
+
+</RelativeLayout>

@@ -22,7 +22,7 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
      * 添加更多的数据
      */
     fun addData(articleBeans: MutableList<ArticleModel.Data.Datas>, position: Int) {
-        this.bean?.addAll(articleBeans)
+        this.beans?.addAll(articleBeans)
         notifyItemRangeInserted(position + 1, articleBeans.size)    // 添加完数据刷新
     }
 
@@ -31,10 +31,10 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
      */
     fun setLoadingStatus(status: Int) {
         this.loadStatus = status
-        notifyItemRangeChanged(bean.size, 1)
+        notifyItemRangeChanged(beans.size, 1)
     }
 
-    class ContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title = itemView.findViewById(R.id.title) as TextView
         val collect = itemView.findViewById(R.id.collect) as ImageView
         val star = itemView.findViewById(R.id.star) as TextView
@@ -53,14 +53,14 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
         return super.createViewHolder(parent, viewType)
     }
 
-    override fun getItemCount(): Int = bean?.size + ITEM_FOOTER_COUNT ?: 0
+    override fun getItemCount(): Int = beans?.size + ITEM_FOOTER_COUNT ?: 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ContentViewHolder) {
-            if (position >= bean.size) {
+            if (position >= beans.size) {
                 return
             }
-            val articleBean = bean?.get(position)
+            val articleBean = beans?.get(position)
             holder.title.setText(articleBean.title)
             var icon: Int
 
@@ -76,11 +76,11 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
             holder.author.setText(articleBean.author)
 
             holder.collect.setOnClickListener {
-                onItemClickListener?.onItemCollectClick(bean.get(position), position)
+                onItemClickListener?.onItemCollectClick(beans.get(position), position)
                 notifyItemChanged(position)
             }
             holder.itemView.setOnClickListener {
-                onItemClickListener?.onItemClick(bean.get(position), position)
+                onItemClickListener?.onItemClick(beans.get(position), position)
             }
         } else if (holder is FooterViewHolder) {
             setFooterData(holder)
