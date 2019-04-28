@@ -1,10 +1,11 @@
 package com.din.wanandroid.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
-import com.din.thedialog.Res;
 
 /**
  * @author dinzhenyan
@@ -15,10 +16,10 @@ public class Dashboard extends View {
 
     private static final int ANGLE = 120;
 
-    private static final int DEFAULT_WIDTH = Res.dp2px(100);
-    private static final int DEFAULT_HEIGHT = Res.dp2px(100);
+    private static final int DEFAULT_WIDTH = dp2px(100);
+    private static final int DEFAULT_HEIGHT = dp2px(100);
 
-    private static final float STROKE_WIDTH = Res.dp2px(2);
+    private static final float STROKE_WIDTH = dp2px(2);
 
     private Paint mPaintArc;
     private Paint mPaintDash;
@@ -81,7 +82,7 @@ public class Dashboard extends View {
         // 中心点
         Paint mPoint = new Paint();
         mPoint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, Res.dp2px(4), mPoint);
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, dp2px(4), mPoint);
     }
 
     @Override
@@ -129,5 +130,9 @@ public class Dashboard extends View {
 
     private int getAngleFromMark(int mark) {
         return (int) (90 + (float) ANGLE / 2 + (360 - (float) ANGLE) / 20 + mark);
+    }
+
+    public static int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
 }

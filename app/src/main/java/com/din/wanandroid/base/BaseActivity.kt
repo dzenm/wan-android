@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.din.helper.screen.ScreenHelper
 
 /**
  * @author dinzhenyan
@@ -18,10 +19,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layoutId())
 
-        getToolbar()?.let {
-            setSupportActionBar(it)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        ScreenHelper.setToolBarAndHomeUp(this, getToolbar())
         initView()
     }
 
@@ -32,9 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract fun initView()
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            android.R.id.home -> finish()
-        }
+        ScreenHelper.setHomeUpAction(this, item)
         return super.onOptionsItemSelected(item)
     }
 }

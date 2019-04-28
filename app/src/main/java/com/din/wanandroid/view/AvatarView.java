@@ -1,10 +1,11 @@
 package com.din.wanandroid.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
-import com.din.thedialog.Res;
 import com.din.wanandroid.R;
 
 /**
@@ -14,8 +15,8 @@ import com.din.wanandroid.R;
  */
 public class AvatarView extends View {
 
-    private static final int WIDTH = Res.dp2px(200);
-    private static final int PADDING = Res.dp2px(50);
+    private static final int WIDTH = dp2px(200);
+    private static final int PADDING = dp2px(50);
 
     private Bitmap mBitmap;
     private Paint mPaint;
@@ -64,5 +65,9 @@ public class AvatarView extends View {
         options.inDensity = options.outWidth;
         options.inTargetDensity = width;
         return BitmapFactory.decodeResource(getResources(), R.drawable.up_grade_ic_top, options);
+    }
+
+    public static int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
 }

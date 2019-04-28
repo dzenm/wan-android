@@ -1,13 +1,14 @@
 package com.din.wanandroid.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
-import com.din.thedialog.Res;
 
 /**
  * @author dinzhenyan
@@ -16,8 +17,8 @@ import com.din.thedialog.Res;
  */
 public class SportView extends View {
 
-    private static final int RING_WIDTH = Res.dp2px(20);
-    private static final int RADIUS = Res.dp2px(150);
+    private static final int RING_WIDTH = dp2px(20);
+    private static final int RADIUS = dp2px(150);
     private static final int CIRCLE_COLOR = Color.parseColor("#90A4AE");
     private static final int HEIGHTLIGHT_COLOR = Color.parseColor("#FF4081");
     private Paint mPaint;
@@ -32,7 +33,7 @@ public class SportView extends View {
 
     {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setTextSize(Res.dp2px(100));
+        mPaint.setTextSize(dp2px(100));
         mPaint.setTextAlign(Paint.Align.CENTER);
         text = "1000步";
 
@@ -67,5 +68,9 @@ public class SportView extends View {
         // 绘制文字
         mPaint.setStyle(Paint.Style.FILL);
         canvas.drawText(text, getWidth() / 2, getHeight() / 2 - offset, mPaint);
+    }
+
+    public static int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
 }

@@ -1,19 +1,20 @@
 package com.din.wanandroid.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import androidx.annotation.Nullable;
-import com.din.thedialog.Res;
 
 public class PieChart extends View {
 
-    private static final int RADIUS = Res.dp2px(100);
-    private static final int LENGTH = Res.dp2px(12);
+    private static final int RADIUS = dp2px(100);
+    private static final int LENGTH = dp2px(12);
 
     private static final int PULL_OUT_INDEX = 2;
     private Paint mPaint;
@@ -53,5 +54,9 @@ public class PieChart extends View {
             canvas.restore();
             currentAngle += angles[i];
         }
+    }
+
+    public static int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
 }
