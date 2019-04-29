@@ -1,5 +1,8 @@
 package com.din.helper.util;
 
+import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
 
@@ -12,7 +15,7 @@ import java.io.InputStreamReader;
  * @date 2019-04-28 21:46
  * @IDE Android Studio
  */
-public class OsUtil {
+public class OsHelper {
 
     public static final String ROM_MIUI = "MIUI";
     public static final String ROM_EMUI = "EMUI";
@@ -163,4 +166,19 @@ public class OsUtil {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
+    /**
+     * 获取App版本号
+     * @return
+     */
+    public int getVersionCode(Activity sActivity) {
+        int version = 0;
+        try {
+            PackageInfo info = sActivity.getPackageManager().getPackageInfo(sActivity.getPackageName(), 0);
+            version = info.versionCode;
+            return version;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
+    }
 }

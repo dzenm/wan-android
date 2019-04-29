@@ -2,7 +2,7 @@ package com.din.wanandroid.activities
 
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.din.thedialog.PromptDialog
+import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.adapter.TabAdapter
 import com.din.wanandroid.api.Api

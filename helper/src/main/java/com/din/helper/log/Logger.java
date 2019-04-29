@@ -177,7 +177,7 @@ public class Logger {
         public LogDumper(String pid, String dir) {
             mPID = pid;
             try {
-                mFileOutputStream = new FileOutputStream(new File(dir, DateHelper.getTimeSecond() + SUFFIX));
+                mFileOutputStream = new FileOutputStream(new File(dir, DateHelper.getCurrentTimeMillis() + SUFFIX));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -243,7 +243,7 @@ public class Logger {
                         continue;
                     }
                     if (mFileOutputStream != null && line.contains(mPID)) {
-                        mFileOutputStream.write(("|======|" + DateHelper.getTimeSecond() + " " + line + "\n").getBytes());
+                        mFileOutputStream.write(("|======|" + DateHelper.getCurrentTimeMillis() + " " + line + "\n").getBytes());
                     }
                 }
                 mBufferedReader.close();

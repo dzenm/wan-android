@@ -20,105 +20,135 @@ public class DateHelper {
     private static final String DATE_TIME_SECOND = "yyyy-MM-dd_HH:mm:ss_SSS";
 
     /**
-     * 用于格式化日期,作为日志文件名的一部分
-     *
+     * 获取当前时间（具体到毫秒），例：2019-04-29_21:44:08_801
      * @return
      */
-    public static String getTimeSecond() {
-        return dateFormat(DATE_TIME_SECOND).format(new Date());                  // 打印的时间
+    public static String getCurrentTimeMillis() {
+        return dateFormat(DATE_TIME_SECOND).format(new Date());
     }
 
     /**
-     * 当前时间戳转日期加时间
-     *
+     * 获取当前时间（具体到分钟），例：2019-04-29 21:52
      * @return
      */
     public static String getCurrentDateTime() {
-        return dateFormat(DATE + " " + TIME).format(new Date());        // 将时间戳转化为SimpleDateFormat格式
+        return dateFormat(DATE + " " + TIME).format(new Date());
     }
 
     /**
-     * 当前时间戳转日期
-     *
+     * 获取当前日期（年月日），例：2019-04-29
      * @return
      */
     public static String getCurrentDate() {
-        return dateFormat(DATE).format(new Date());                     // 将时间戳转化为SimpleDateFormat格式;
+        return dateFormat(DATE).format(new Date());
     }
 
     /**
-     * 当前时间戳转时间
-     *
+     * 获取当前时间(只获取时分)例：21:56
      * @return
      */
     public static String getCurrentTime() {
-        return dateFormat(TIME).format(new Date());                    // 将时间戳转化为SimpleDateFormat格式;
+        return dateFormat(TIME).format(new Date());
     }
 
     /**
-     * 任意时间戳转日期
-     *
-     * @param longDate
+     * 将时间戳转日期，例：将1556546343688 转成 2019-04-29
+     * @param timestamp
      * @return
      */
-    public static String formatLongDate(String longDate) {
-        return dateFormat(DATE).format(Long.parseLong(longDate));            // 格式化时间;
+    public static String timestampToDate(String timestamp) {
+        return dateFormat(DATE).format(Long.parseLong(timestamp));
     }
 
     /**
-     * 格式化日期和时间
-     *
+     * 任意时间戳转时间，例：将1556546343688 转成 21:59
+     * @param timestamp
      * @return
      */
-    public static String formatDateTime(String date) {
-        return dateFormat(DATE + TIME).format(date);                        // 将时间戳转化为SimpleDateFormat格式
+    public static String timestampToTime(String timestamp) {
+        return dateFormat(TIME).format(Long.parseLong(timestamp));
     }
 
     /**
-     * 任意时间戳转时间
-     *
-     * @param longDate
+     * 任意时间戳转时间，例：将1556546343688 转成 2019-04-29 21:59
+     * @param timestamp
      * @return
      */
-    public static String formatLongDateTime(String longDate) {
-        return dateFormat(DATE + TIME).format(Long.parseLong(longDate));   // 格式化时间
+    public static String timestampToDateTime(String timestamp) {
+        return dateFormat(DATE + " " + TIME).format(Long.parseLong(timestamp));
     }
 
+
     /**
-     * 任意时间戳转星期
-     *
-     * @param date
+     * 日期转星期，例：2019-04-29 转换的结果为 星期一
+     * @param date 格式必须为yyyy-MM-dd
      * @return
      */
-    public static String date2Week(String date) {
+    public static String dateToWeek(String date) {
         Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(dateFormat(DATE).parse(date));             // 设置格式化后的时间
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return WEEKS[calendar.get(Calendar.DAY_OF_WEEK) - 1];
+        calendar.setTime(dateParse(DATE, date));
+        int position = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        return WEEKS[position];
     }
 
     /**
-     * 日期转时间戳
-     *
-     * @param date
+     * 日期转时间戳 例：2019-04-29 21:59 转换的结果为 1556546340000
+     * @param datetime 格式必须为yyyy-MM-dd HH:mm
      * @return
      */
-    public static long date2Long(String date) {
-        try {
-            Date mDate = dateFormat(DATE + TIME).parse(date);
-            return mDate.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
+    public static long dateTimeToTimestamp(String datetime) {
+        return dateParse(DATE + " " + TIME, datetime).getTime();
+    }
+
+    /**
+     * 日期转时间戳 例：2019-04-29 转换的结果为 1556546340000
+     * @param datetime 格式必须为yyyy-MM-dd
+     * @return
+     */
+    public static long dateToTimestamp(String datetime) {
+        return dateParse(DATE, datetime).getTime();
+    }
+
+    /**
+     * 获取该时间在该星期的第一天和最后一天日期
+     * @param date 格式必须为yyyy-MM-dd
+     * @return
+     */
+    public static String[] getFirstAndLastOfWeek(String date) {
+        String[] weeks = new String[2];
+        // 获取Calendar实例，并重新设置格式化的日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateParse(DATE, date));
+        int day = (calendar.get(Calendar.DAY_OF_WEEK) == 1) ? -6 : 2 - calendar.get(Calendar.DAY_OF_WEEK);
+
+        // 对日期重新调整之后获取该周的第一天
+        calendar.add(Calendar.DAY_OF_WEEK, day);
+        weeks[0] = dateFormat(DATE).format(calendar.getTime());      // 所在星期开始日期
+        // 对日期重新调整之后获取该周的最后一天
+        calendar.add(Calendar.DAY_OF_WEEK, 6);
+        weeks[1] = dateFormat(DATE).format(calendar.getTime());      // 所在星期结束日期
+        return weeks;
+    }
+
+    /**
+     * 当前日期（通过Calendar类获取），例：2019-4-29
+     * @return
+     */
+    public static String nowDate() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    /**
+     * 当前时间（通过Calendar类获取），例：22:48
+     * @return
+     */
+    public static String nowTime() {
+        return Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE);
     }
 
     /**
      * 日期View获取PickerDialog的日期
-     *
      * @param context
      */
     public static void dateTimeDialog(final Context context, final TextView date, final TextView time) {
@@ -150,7 +180,6 @@ public class DateHelper {
 
     /**
      * 日期View获取PickerDialog的日期
-     *
      * @param context
      */
     public static void dateDialog(Context context, final TextView date) {
@@ -169,7 +198,6 @@ public class DateHelper {
 
     /**
      * 日期View获取PickerDialog的日期
-     *
      * @param context
      */
 
@@ -190,7 +218,6 @@ public class DateHelper {
 
     /**
      * 时间View获取PickerDialog的时间
-     *
      * @param context
      * @param hourText
      * @param minuteText
@@ -206,52 +233,24 @@ public class DateHelper {
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
     }
 
-
     /**
-     * 获取该时间在该星期的第一天和最后一天日期
-     *
-     * @param date
+     * 字符串日期转化为Date
+     * @param format
+     * @param dateStr
      * @return
      */
-    public static String getFirstAndLastOfWeek(String date) {
-        Calendar calendar = Calendar.getInstance();
+    private static Date dateParse(String format, String dateStr) {
+        Date date = null;
         try {
-            calendar.setTime(dateFormat(DATE).parse(date));                 // 设置格式化的日期
+            date = dateFormat(format).parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int day = (calendar.get(Calendar.DAY_OF_WEEK) == 1) ? -6 : 2 - calendar.get(Calendar.DAY_OF_WEEK);
-
-        calendar.add(Calendar.DAY_OF_WEEK, day);
-        String firstDate = dateFormat(DATE).format(calendar.getTime());     // 所在星期开始日期
-        calendar.add(Calendar.DAY_OF_WEEK, 6);
-        String lastDate = dateFormat(DATE).format(calendar.getTime());      // 所在星期结束日期
-        return firstDate + "-" + lastDate;
-    }
-
-    /**
-     * 现在的日期
-     *
-     * @return
-     */
-    public static String nowDate() {
-        Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH);
-    }
-
-
-    /**
-     * 现在的时间
-     *
-     * @return
-     */
-    public static String nowTime() {
-        return Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":" + Calendar.getInstance().get(Calendar.MINUTE);
+        return date;
     }
 
     /**
      * 日期格式化
-     *
      * @param format
      * @return
      */

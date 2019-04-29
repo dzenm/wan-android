@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.din.helper.R;
-import com.din.helper.util.OsUtil;
+import com.din.helper.util.OsHelper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -209,9 +209,9 @@ public class ScreenHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 setStatusBarFontIconDark(activity, TYPE_M, dark);
-            } else if (OsUtil.isMiui()) {
+            } else if (OsHelper.isMiui()) {
                 setStatusBarFontIconDark(activity, TYPE_MIUI, dark);
-            } else if (OsUtil.isFlyme()) {
+            } else if (OsHelper.isFlyme()) {
                 setStatusBarFontIconDark(activity, TYPE_FLYME, dark);
             } else {//其他情况
                 return false;
@@ -341,7 +341,7 @@ public class ScreenHelper {
      * @param editText
      */
     public static void setHideSoftInputOnFocus(EditText editText) {
-        if (OsUtil.afterL()) {
+        if (OsHelper.afterL()) {
             editText.setShowSoftInputOnFocus(false);
         } else {
             Class<EditText> editClass = EditText.class;

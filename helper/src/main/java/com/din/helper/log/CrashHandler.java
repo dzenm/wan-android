@@ -155,7 +155,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * @param causeInfos
      */
     private String saveFile(String causeInfos) {
-        String fileName = FILE_NAME + DateHelper.getTimeSecond() + FILE_SUFFIX;                // 文件名
+        String fileName = FILE_NAME + DateHelper.getCurrentTimeMillis() + FILE_SUFFIX;                // 文件名
         try {
             String folders = FileHelper.getInstance().getFolders("Log", "crash");
             if (folders == null) {

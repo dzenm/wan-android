@@ -5,8 +5,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.din.thedialog.InfoDialog
-import com.din.thedialog.PromptDialog
+import com.din.helper.dialog.InfoDialog
+import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.adapter.CollectAdapter
 import com.din.wanandroid.api.Api

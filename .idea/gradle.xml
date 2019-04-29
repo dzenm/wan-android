@@ -11,7 +11,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/banner" />
             <option value="$PROJECT_DIR$/helper" />
-            <option value="$PROJECT_DIR$/thedialog" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

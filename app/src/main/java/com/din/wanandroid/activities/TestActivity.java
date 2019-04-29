@@ -7,8 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import com.din.thedialog.*;
-import com.din.thedialog.LoadProgress;
+import com.din.helper.dialog.*;
 import com.din.wanandroid.R;
 import com.din.wanandroid.databinding.ActivityTestBinding;
 

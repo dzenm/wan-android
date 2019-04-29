@@ -6,7 +6,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.din.thedialog.PromptDialog
+import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.api.Api
 import com.din.wanandroid.api.UserApi
