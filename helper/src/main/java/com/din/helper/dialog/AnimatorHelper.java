@@ -2,11 +2,17 @@ package com.din.helper.dialog;
 
 import com.din.helper.R;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 一些位置方向的动画
+ */
 public final class AnimatorHelper {
 
     /**
      * 放大
-     *
      * @return
      */
     public static int expand() {
@@ -15,7 +21,6 @@ public final class AnimatorHelper {
 
     /**
      * 缩小
-     *
      * @return
      */
     public static int shrink() {
@@ -24,7 +29,6 @@ public final class AnimatorHelper {
 
     /**
      * 下进下出
-     *
      * @return
      */
     public static int bottom() {
@@ -33,7 +37,6 @@ public final class AnimatorHelper {
 
     /**
      * 下进上出
-     *
      * @return
      */
     public static int bottom2Top() {
@@ -42,7 +45,6 @@ public final class AnimatorHelper {
 
     /**
      * 上进上出
-     *
      * @return
      */
     public static int top() {
@@ -51,7 +53,6 @@ public final class AnimatorHelper {
 
     /**
      * 上进下出
-     *
      * @return
      */
     public static int top2Bottom() {
@@ -60,7 +61,6 @@ public final class AnimatorHelper {
 
     /**
      * 左进左出
-     *
      * @return
      */
     public static int left() {
@@ -69,7 +69,6 @@ public final class AnimatorHelper {
 
     /**
      * 右进右出
-     *
      * @return
      */
     public static int right() {
@@ -78,7 +77,6 @@ public final class AnimatorHelper {
 
     /**
      * 左进右出
-     *
      * @return
      */
     public static int left2Right() {
@@ -87,7 +85,6 @@ public final class AnimatorHelper {
 
     /**
      * 右进左出
-     *
      * @return
      */
     public static int right2Left() {
@@ -96,15 +93,14 @@ public final class AnimatorHelper {
 
     /**
      * 下弹出上弹出
-     *
      * @return
      */
     public static int overshoot() {
         return R.style.BaseDialog_Overshoot_Animator;
     }
+
     /**
      * 透明度变化
-     *
      * @return
      */
     public static int alpha() {

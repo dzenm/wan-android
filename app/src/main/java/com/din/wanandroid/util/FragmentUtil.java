@@ -32,7 +32,6 @@ public class FragmentUtil {
 
     /**
      * 静态调用单例模式
-     *
      * @return
      */
     public static final FragmentUtil getInstance() {

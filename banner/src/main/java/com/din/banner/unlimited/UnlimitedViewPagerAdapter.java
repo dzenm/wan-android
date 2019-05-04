@@ -1,4 +1,4 @@
-package com.din.wanandroid.util;
+package com.din.banner.unlimited;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -6,14 +6,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-import java.util.List;
+public class UnlimitedViewPagerAdapter extends PagerAdapter {
 
-public class ViewPagerAdapter extends PagerAdapter {
+    private ImageView[] mImageViews;
 
-    private List<ImageView> imageViews;
-
-    public ViewPagerAdapter(List<ImageView> imageViews) {
-        this.imageViews = imageViews;
+    public UnlimitedViewPagerAdapter(ImageView[] imageViews) {
+        mImageViews = imageViews;
     }
 
     /**
@@ -44,8 +42,8 @@ public class ViewPagerAdapter extends PagerAdapter {
      */
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        int newPosition = position % imageViews.size();
-        container.removeView(imageViews.get(newPosition));
+        int newPosition = position % mImageViews.length;
+        container.removeView(mImageViews[newPosition]);
     }
 
     /**
@@ -57,10 +55,12 @@ public class ViewPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        int newPosition = position % imageViews.size();
-        ImageView imageView = imageViews.get(newPosition);
-        // a. 把View对象添加到container中
-        container.addView(imageView);
+        int newPosition = position % mImageViews.length;
+        ImageView imageView = mImageViews[newPosition];
+        if (container.getLayoutParams() != null) {
+            // a. 把View对象添加到container中
+            container.addView(imageView);
+        }
         // b. 把View对象返回给框架, 适配器
         return imageView; // 必须重写, 否则报异常
     }

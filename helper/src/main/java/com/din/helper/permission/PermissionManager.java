@@ -3,13 +3,19 @@ package com.din.helper.permission;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.nfc.Tag;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 权限请求管理工具类
+ */
 public final class PermissionManager {
 
     private static final String TAG = PermissionManager.class.getSimpleName();

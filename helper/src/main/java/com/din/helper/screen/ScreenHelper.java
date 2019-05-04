@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.din.helper.R;
-import com.din.helper.util.OsHelper;
+import com.din.helper.appupdate.OsHelper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -28,7 +28,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * 屏幕尺寸获取工具类
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 屏幕获取工具类
  */
 public class ScreenHelper {
 

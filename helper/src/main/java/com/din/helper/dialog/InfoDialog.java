@@ -10,7 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.din.helper.R;
 
-public class InfoDialog extends BaseDialog implements View.OnClickListener {
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ *
+ * 提示的Dialog
+ */
+public class InfoDialog extends AbsDialog implements View.OnClickListener {
 
     /*
      * 提示框的标题

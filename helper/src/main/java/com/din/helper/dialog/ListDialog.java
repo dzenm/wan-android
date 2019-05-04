@@ -13,7 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.din.helper.R;
 
-public class ListDialog extends BaseDialog implements AdapterView.OnItemClickListener, View.OnClickListener {
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 带List的Dialog
+ */
+public class ListDialog extends AbsDialog implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private TextView tv_title;
     private Button bt_cancel;
@@ -75,7 +82,7 @@ public class ListDialog extends BaseDialog implements AdapterView.OnItemClickLis
     }
 
     @Override
-    public BaseDialog build() {
+    public AbsDialog build() {
         mAnimator = AnimatorHelper.shrink();
         super.build();
         lv_list.setBackgroundResource(mBackground);

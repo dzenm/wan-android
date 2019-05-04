@@ -1,15 +1,16 @@
-package com.din.banner;
+package com.din.banner.limited;
 
 /**
  * @author dinzhenyan
  * @date 2019-04-21 18:35
  * @IDE Android Studio
+ * <p>
+ * 小圆点的行为
  */
-public class Point {
+public class PointBehavior {
 
     /**
      * 每次滑动之后对小圆点重新调整
-     *
      * @param position
      * @param offset
      */

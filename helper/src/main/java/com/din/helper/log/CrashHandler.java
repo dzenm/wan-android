@@ -9,19 +9,21 @@ import android.os.Looper;
 import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.din.helper.date.DateHelper;
 import com.din.helper.file.FileHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 异常日志收集的处理
+ */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = CrashHandler.class.getSimpleName();
@@ -30,7 +32,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String FILE_SUFFIX = ".txt";
     private static final boolean isDebug = true;
 
-    private Context context;                                            // 程序的Context对象
+    private Context context;
     private Thread.UncaughtExceptionHandler defaultHandler;             // 系统默认的UncaughtException处理类
 
     private CrashHandler() {
@@ -53,16 +55,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 当程序中有未被捕获的异常，系统将会自动调用uncaughtException方法
-     *
      * @param thread 出现未捕获异常的线程
      * @param ex     未捕获的异常
      */
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        if (catchCrashException(ex) && defaultHandler != null) {    // 如果系统提供了默认处理，则交给系统处理，否则就自己结束
+        if (catchCrashException(ex) && defaultHandler != null) {        // 如果系统提供了默认处理，则交给系统处理，否则就自己结束
             defaultHandler.uncaughtException(thread, ex);
         } else {
-            Process.killProcess(Process.myPid());                   // 退出应用
+            Process.killProcess(Process.myPid());                       // 退出应用
         }
     }
 
@@ -78,32 +79,31 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Looper.loop();
             }
         }).start();
-        saveCrashInfo(ex);                                  // 保存日志文件
+        saveCrashInfo(ex);                                              // 保存日志文件
         return true;
     }
 
     /**
      * 保存错误信息到文件中
-     *
      * @param ex
      * @return 返回文件名称, 便于将文件传送到服务器
      */
     private String saveCrashInfo(Throwable ex) {
-        Map<String, String> infos = saveDeviceInfo();           // 收集设备参数信息
-        StringBuffer stringBuffer = new StringBuffer();         // 输出手机、系统、软件信息
+        Map<String, String> infos = saveDeviceInfo();                   // 收集设备参数信息
+        StringBuffer stringBuffer = new StringBuffer();                 // 输出手机、系统、软件信息
         stringBuffer.append("-------- 输出手机、系统、软件信息 --------\n\n");
         for (Map.Entry<String, String> entry : infos.entrySet()) {
             stringBuffer.append(entry.getKey() + " ------ " + entry.getValue() + "\n");
         }
         stringBuffer.append("\n-------- 手机、系统、软件信息收集完成 --------\n");
 
-        Writer writer = new StringWriter();                     // 输出异常信息
+        Writer writer = new StringWriter();                             // 输出异常信息
         PrintWriter printWriter = new PrintWriter(writer);
         ex.printStackTrace(printWriter);
         Throwable cause = ex.getCause();
         while (cause != null) {
             cause.printStackTrace(printWriter);
-            printWriter.append("\r\n");                         // 换行 每个个异常栈之间换行
+            printWriter.append("\r\n");                                 // 换行 每个个异常栈之间换行
             cause = cause.getCause();
         }
         printWriter.close();
@@ -120,18 +120,18 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * 收集设备参数信息
      */
     private Map<String, String> saveDeviceInfo() {
-        Map<String, String> infos = new HashMap<String, String>();                          // 用来存储设备信息
+        Map<String, String> infos = new HashMap<String, String>();                  // 用来存储设备信息
         try {
             // 获取应用包参数信息
             PackageInfo info = context.getPackageManager().getPackageInfo(
                     context.getPackageName(), PackageManager.GET_ACTIVITIES);
             if (info != null) {
                 infos.put("安卓版本号== ", Build.VERSION.RELEASE + String.valueOf(Build.VERSION.SDK_INT));     // Android版本号
-                infos.put("手机制造商== ", Build.MANUFACTURER);                   // 手机制造商
+                infos.put("手机制造商== ", Build.MANUFACTURER);          // 手机制造商
                 infos.put("App版本名称== ", info.versionName == null ? "null" : info.versionName);     // App版本名称
-                infos.put("App版本号== ", info.versionCode + "");                // App版本号
-                infos.put("手机型号== ", Build.MODEL);                           // 手机型号
-                infos.put("CPU架构== ", Build.CPU_ABI);                         // CPU架构
+                infos.put("App版本号== ", info.versionCode + "");       // App版本号
+                infos.put("手机型号== ", Build.MODEL);                  // 手机型号
+                infos.put("CPU架构== ", Build.CPU_ABI);                // CPU架构
             }
 
             // 获取设备硬件信息
@@ -151,7 +151,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 存储为文件
-     *
      * @param causeInfos
      */
     private String saveFile(String causeInfos) {

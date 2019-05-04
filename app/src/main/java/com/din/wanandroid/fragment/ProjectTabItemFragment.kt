@@ -43,15 +43,14 @@ class ProjectTabItemFragment(var typeId: String) : RecycleFragment(), ArticleAda
         fetchListData(1, false)
     }
 
-    override fun scrollToLastVisibleItem(lastPosition: Int) {
+    override fun onLastItem(lastPosition: Int) {
         adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_LOADING)
         fetchListData(lastPosition, true)
     }
 
-    override fun swipeToRefresh() {
+    override fun swipeRefreshing() {
         fetchListData(1, false)
     }
-
 
     override fun lazyPrepareFetchData() {
         fetchListData(1, false)

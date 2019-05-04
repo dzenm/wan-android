@@ -10,11 +10,17 @@ import androidx.core.content.ContextCompat;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 包相关的操作
+ */
 public class PackageHelper {
 
     /**
      * 返回应用程序在清单文件中注册的权限
-     *
      * @param activity
      * @return
      */
@@ -30,7 +36,6 @@ public class PackageHelper {
 
     /**
      * 是否有安装权限
-     *
      * @param activity
      * @return
      */
@@ -43,7 +48,6 @@ public class PackageHelper {
 
     /**
      * 是否有悬浮窗权限
-     *
      * @param activity
      * @return
      */
@@ -56,7 +60,6 @@ public class PackageHelper {
 
     /**
      * 检查是否授予权限
-     *
      * @param permission
      * @return
      */
@@ -66,7 +69,6 @@ public class PackageHelper {
 
     /**
      * 检测权限是否在清单文件中注册
-     *
      * @param activity
      * @param permission
      */
@@ -84,7 +86,6 @@ public class PackageHelper {
 
     /**
      * 是否显示解释权限
-     *
      * @param permission
      * @return
      */
@@ -94,7 +95,6 @@ public class PackageHelper {
 
     /**
      * 动态权限只有在Android 6.0之后
-     *
      * @return
      */
     public static boolean isMarshmallow() {
@@ -103,7 +103,6 @@ public class PackageHelper {
 
     /**
      * 是否是8.0以上版本
-     *
      * @return
      */
     public static boolean isOreo() {

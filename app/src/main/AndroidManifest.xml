@@ -15,10 +15,10 @@
         <activity
                 android:name=".activities.TablesActivity"
                 android:label="@string/title_activity_tables"
-                android:theme="@style/AppTheme.NoActionBar"></activity>
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CollectActivity" />
         <activity android:name=".activities.WebActivity" />
-        <activity android:name=".activities.TestActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

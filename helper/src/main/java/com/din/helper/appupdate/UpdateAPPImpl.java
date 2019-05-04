@@ -1,4 +1,4 @@
-package com.din.helper.util;
+package com.din.helper.appupdate;
 
 /**
  * @author dinzhenyan

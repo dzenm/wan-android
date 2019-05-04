@@ -2,10 +2,6 @@ package com.din.wanandroid.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import com.din.wanandroid.R;
 
+@SuppressLint("AppCompatCustomView")
 public class ClearEditText extends EditText implements View.OnFocusChangeListener, TextWatcher {
 
     private Drawable clearDrawable;
@@ -43,11 +40,8 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
      * @param context
      */
     private void init(Context context) {
-        clearDrawable = getCompoundDrawables()[2];
-        if (clearDrawable == null) {
-            clearDrawable = new BitmapDrawable(null, createBitmap(R.drawable.icon_delete, context));
-        }
-
+        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.icon_delete);
+        clearDrawable = DrawableCompat.wrap(drawable);
         clearDrawable.setBounds(0, 0, clearDrawable.getIntrinsicWidth(), clearDrawable.getIntrinsicHeight());
         setClearIconVisible(false);
         setOnFocusChangeListener(this);
@@ -69,12 +63,13 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int x = (int) event.getX();
         if (getCompoundDrawables()[2] != null) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                boolean touchAble = event.getX() > (getWidth() - getPaddingRight() - clearDrawable.getIntrinsicWidth())
-                        && (event.getX() < ((getWidth() - getPaddingRight())));
-                if (touchAble) {
-                    this.setText("");
+                int iconLeft = getWidth() - getPaddingRight() - clearDrawable.getIntrinsicWidth();
+                int iconRight = (getWidth() - getPaddingRight());
+                if ((x > iconLeft) && (x < iconRight) && clearDrawable.isVisible()) {
+                    setText("");
                 }
             }
         }
@@ -108,7 +103,9 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
      * 当输入框里面内容发生变化的时候回调的方法
      */
     public void onTextChanged(CharSequence s, int start, int count, int after) {
-//                setClearIconVisible(s.length() > 0);
+        if (isFocused()) {
+            setClearIconVisible(s.length() > 0);
+        }
     }
 
     public void afterTextChanged(Editable editable) {
@@ -118,7 +115,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
      * 设置晃动动画
      */
     public void setShakeAnimation() {
-        this.startAnimation(shakeAnimation(2));
+        startAnimation(shakeAnimation(2));
     }
 
     /**
@@ -131,34 +128,5 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
         translateAnimation.setInterpolator(new CycleInterpolator(counts));
         translateAnimation.setDuration(1000);
         return translateAnimation;
-    }
-
-    /**
-     * 给图标染上当前提示文本的颜色并且转出Bitmap
-     * @param resources
-     * @param context
-     * @return
-     */
-    public Bitmap createBitmap(int resources, Context context) {
-        final Drawable drawable = ContextCompat.getDrawable(context, resources);
-        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(wrappedDrawable, getCurrentHintTextColor());
-        return drawableToBitamp(wrappedDrawable);
-    }
-
-    /**
-     * drawable 转换成 bitmap
-     * @param drawable
-     * @return
-     */
-    private Bitmap drawableToBitamp(Drawable drawable) {
-        int w = drawable.getIntrinsicWidth();
-        int h = drawable.getIntrinsicHeight();
-        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, w, h);
-        drawable.draw(canvas);
-        return bitmap;
     }
 }

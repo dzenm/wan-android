@@ -6,6 +6,13 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 带输入的Dialog
+ */
 public class EditDialog extends InfoDialog implements TextWatcher {
 
     /************************************* 以下为自定义提示内容 *********************************/

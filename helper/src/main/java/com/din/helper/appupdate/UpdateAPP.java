@@ -1,4 +1,4 @@
-package com.din.helper.util;
+package com.din.helper.appupdate;
 
 import android.os.Handler;
 import android.widget.Toast;

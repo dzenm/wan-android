@@ -1,9 +1,8 @@
-package com.din.banner;
+package com.din.banner.limited;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -13,12 +12,14 @@ import java.util.List;
  * @author dinzhenyan
  * @date 2019-04-21 18:06
  * @IDE Android Studio
+ * <p>
+ * ViewPager Adapter
  */
-public class ViewPagerAdapter extends PagerAdapter {
+public class ViewPagerAdapter<T extends View> extends PagerAdapter {
 
-    private List<ImageView> mViews;
+    private List<T> mViews;
 
-    public void setViews(List<ImageView> mViews) {
+    public void setViews(List<T> mViews) {
         this.mViews = mViews;
     }
 

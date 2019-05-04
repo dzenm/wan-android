@@ -1,6 +1,8 @@
-package com.din.banner;
+package com.din.banner.limited;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -8,12 +10,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
+import com.din.banner.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-21 18:06
+ * @IDE Android Studio
+ * <p>
+ * 轮播图
+ */
 public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private final static int LEFT_PAGE = 0;         // 左边显示页（根据index来调整左边页应该显示的图片）
@@ -34,6 +44,7 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
     private int mCurrentPosition;                   // 记录当前显示的图片真正的位置
     private int mPointSize = 25;                    // 小圆点大小
     private int mPointMargin = 10;                  // 小圆点之间等间隔距离
+    private int mImageMargin = 15;                  // ImageView之间的间距值
 
     private long period = 2000;                     // 多长时间之后计时开始
     private long delay = 4000;                      // 多长时间后开始启动计数
@@ -44,7 +55,7 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
 
     private OnItemClickListener onItemClickListener;// 点击事件
     private Timer mTimer;                           // 轮播图定时器
-    private Point mPoint;
+    private PointBehavior mPointBehavior;
 
     /**
      * 静态方法中调用本类的静态变量
@@ -152,17 +163,6 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
     }
 
     /**
-     * 跳转到下一页
-     */
-    public void selectPage(int page) {
-        if (page > mCurrentPosition) {
-            viewPager.setCurrentItem(RIGHT_PAGE, true);
-        } else if (page < mCurrentPosition) {
-            viewPager.setCurrentItem(LEFT_PAGE, true);
-        }
-    }
-
-    /**
      * 定时跳转
      */
     private TimerTask mTimerTask = new TimerTask() {
@@ -181,12 +181,12 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
      * 初始化图形控件
      */
     private void initView() {
-        mViews = new ArrayList<ImageView>();
-        mPoint = new Point();
+        mViews = new ArrayList<>();
+        mPointBehavior = new PointBehavior();
         ViewPagerAdapter adapter = new ViewPagerAdapter();
 
         for (int i = 0; i < COUNT_PAGE; i++) {
-            mViews.add(getImageView());
+            mViews.add(getImageView(true));
             int index = isLoop ? (i == 0 ? mSize - 1 : i - 1) : i;
             setImage(i, index);
         }
@@ -195,7 +195,7 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
             RelativeLayout.LayoutParams paramsPoint = (RelativeLayout.LayoutParams) mPointLayout.getLayoutParams();
             paramsPoint.setMargins(0, 0, mPointMargin, 0);      // 设置小圆点左右之间的距离
             for (int i = 0; i < mSize; i++) {
-                ImageView imageView = getImageView();
+                ImageView imageView = getImageView(false);
                 imageView.setLayoutParams(paramsPoint);
                 mPointLayout.addView(imageView, paramsPoint);
                 mPointViews.add(imageView);
@@ -216,9 +216,10 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
      * 设置图片属性
      * @return
      */
-    private ImageView getImageView() {
+    private ImageView getImageView(boolean isAddMargin) {
         ImageView imageView = new ImageView(activity);
         imageView.setOnClickListener(this);
+        if (isAddMargin) imageView.setPadding(dp2px(mImageMargin), dp2px(mImageMargin), dp2px(mImageMargin), dp2px(mImageMargin));
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         return imageView;
     }
@@ -268,7 +269,7 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
             lastPosition = position;
             if (isShowMovePoint) {  // 提示的小圆点
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mIvPoint.getLayoutParams();
-                float offsetDistance = mPoint.movePoint(position, positionOffset, mCurrentPosition, mSize);
+                float offsetDistance = mPointBehavior.movePoint(position, positionOffset, mCurrentPosition, mSize);
                 params.leftMargin = (int) (offsetDistance * mDistance);
                 mIvPoint.setLayoutParams(params);
             }
@@ -379,8 +380,6 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
     public void onPageSelected(int position) {
     }
 
-    private boolean isScrollFinsish = true;
-
     /**
      * 当用手指滑动时，在手指滑动的时刻触发state==1
      * 滑动停止时，先调用state==2，在调用state==0
@@ -391,13 +390,6 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
      */
     @Override
     public void onPageScrollStateChanged(int state) {
-//        if (state == 1) {
-//            destory();
-//            isScrollFinsish = false;
-//        } else if ((state == 0 || state == 2) && !isScrollFinsish) {
-//            start();
-//            isScrollFinsish = true;
-//        }
     }
 
     /**
@@ -416,5 +408,14 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener, View.OnClic
      */
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    /**
+     * dp转px
+     * @param value
+     * @return
+     */
+    public static int dp2px(int value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, Resources.getSystem().getDisplayMetrics());
     }
 }

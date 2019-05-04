@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.ParseException;
@@ -12,6 +11,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 日期格式化的工具类
+ */
 public class DateHelper {
 
     private static final String[] WEEKS = {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
@@ -52,7 +58,7 @@ public class DateHelper {
     }
 
     /**
-     * 将时间戳转日期，例：将1556546343688 转成 2019-04-29
+     * 将时间戳转日期，例：1556546343688 转换的结果 2019-04-29
      * @param timestamp
      * @return
      */
@@ -61,7 +67,7 @@ public class DateHelper {
     }
 
     /**
-     * 任意时间戳转时间，例：将1556546343688 转成 21:59
+     * 任意时间戳转时间，例：1556546343688 转换的结果 21:59
      * @param timestamp
      * @return
      */
@@ -70,7 +76,7 @@ public class DateHelper {
     }
 
     /**
-     * 任意时间戳转时间，例：将1556546343688 转成 2019-04-29 21:59
+     * 任意时间戳转时间，例：1556546343688 转换的结果 2019-04-29 21:59
      * @param timestamp
      * @return
      */
@@ -80,7 +86,7 @@ public class DateHelper {
 
 
     /**
-     * 日期转星期，例：2019-04-29 转换的结果为 星期一
+     * 日期转星期，例：2019-04-29 转换的结果 星期一
      * @param date 格式必须为yyyy-MM-dd
      * @return
      */
@@ -92,7 +98,7 @@ public class DateHelper {
     }
 
     /**
-     * 日期转时间戳 例：2019-04-29 21:59 转换的结果为 1556546340000
+     * 日期转时间戳 例：2019-04-29 21:59 转换的结果 1556546340000
      * @param datetime 格式必须为yyyy-MM-dd HH:mm
      * @return
      */
@@ -101,7 +107,7 @@ public class DateHelper {
     }
 
     /**
-     * 日期转时间戳 例：2019-04-29 转换的结果为 1556546340000
+     * 日期转时间戳 例：2019-04-29 转换的结果 1556546340000
      * @param datetime 格式必须为yyyy-MM-dd
      * @return
      */
@@ -151,7 +157,7 @@ public class DateHelper {
      * 日期View获取PickerDialog的日期
      * @param context
      */
-    public static void dateTimeDialog(final Context context, final TextView date, final TextView time) {
+    public static void dateTimeDialog(final Context context, final OnDateHelper onDateHelper) {
         final Calendar calendarDate = Calendar.getInstance();
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -159,8 +165,7 @@ public class DateHelper {
                 //--------monthOfYear 得到的月份会减1所以我们要加1
                 String mMonth = monthOfYear < 10 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
                 String mDay = dayOfMonth < 10 ? "0" + (dayOfMonth) : String.valueOf(dayOfMonth);
-
-                date.setText(String.valueOf(year) + "-" + mMonth + "/" + mDay);
+                onDateHelper.onDate(String.valueOf(year) + "-" + mMonth + "/" + mDay);
                 Calendar calendarTime = Calendar.getInstance();
                 new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -169,7 +174,7 @@ public class DateHelper {
                         String mHour = hourOfDay < 10 ? ("0" + hourOfDay) : String.valueOf(hourOfDay);
                         String mMinute = minute < 10 ? ("0" + minute) : String.valueOf(minute);
 
-                        time.setText(mHour + ":" + mMinute);
+                        onDateHelper.onTime(mHour + ":" + mMinute);
                     }
                 }, calendarTime.get(Calendar.HOUR_OF_DAY), calendarTime.get(Calendar.MINUTE), true).show();
 
@@ -182,7 +187,7 @@ public class DateHelper {
      * 日期View获取PickerDialog的日期
      * @param context
      */
-    public static void dateDialog(Context context, final TextView date) {
+    public static void currentDate(Context context, final OnDateHelper onDateHelper) {
         Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -191,7 +196,7 @@ public class DateHelper {
                 String mMonth = monthOfYear < 9 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
                 String mDay = dayOfMonth < 10 ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
 
-                date.setText(String.valueOf(year) + "-" + mMonth + "-" + mDay);
+                onDateHelper.onDate(String.valueOf(year) + "-" + mMonth + "-" + mDay);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -200,8 +205,7 @@ public class DateHelper {
      * 日期View获取PickerDialog的日期
      * @param context
      */
-
-    public static void dateDialog(Context context, final TextView month, final TextView day) {
+    public static void currentTime(Context context, final OnDateHelper onDateHelper) {
         Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -210,8 +214,7 @@ public class DateHelper {
                 String mMonth = monthOfYear < 10 ? "0" + (monthOfYear + 1) : String.valueOf(monthOfYear + 1);
                 String mDay = dayOfMonth < 10 ? "0" + (dayOfMonth) : String.valueOf(dayOfMonth);
 
-                month.setText(mDay);
-                day.setText("-" + mMonth + "月");
+                onDateHelper.onDate(mDay + "-" + mMonth + "月");
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -219,16 +222,13 @@ public class DateHelper {
     /**
      * 时间View获取PickerDialog的时间
      * @param context
-     * @param hourText
-     * @param minuteText
      */
-    public static void timeDialog(Context context, final TextView hourText, final TextView minuteText) {
+    public static void timeDialog(Context context, final OnDateHelper onDateHelper) {
         Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                hourText.setText(Integer.toString(hourOfDay));
-                minuteText.setText(Integer.toString(minute));
+                onDateHelper.onTime(Integer.toString(hourOfDay) + ":" + Integer.toString(minute));
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
     }
@@ -256,5 +256,31 @@ public class DateHelper {
      */
     private static SimpleDateFormat dateFormat(String format) {
         return new SimpleDateFormat(format);
+    }
+
+    public class OnDateHelper implements OnDateTimeListener {
+
+        @Override
+        public void onDateTime(String date, String time) {
+
+        }
+
+        @Override
+        public void onDate(String date) {
+
+        }
+
+        @Override
+        public void onTime(String time) {
+
+        }
+    }
+
+    public interface OnDateTimeListener {
+        void onDateTime(String date, String time);
+
+        void onDate(String date);
+
+        void onTime(String time);
     }
 }

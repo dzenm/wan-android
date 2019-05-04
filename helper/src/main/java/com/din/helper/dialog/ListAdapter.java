@@ -9,6 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.din.helper.R;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 带List的Dialog需要用到的Adapter
+ */
 public class ListAdapter extends BaseAdapter {
 
     private String[] texts;

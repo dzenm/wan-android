@@ -17,6 +17,13 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 照片相关的工具类
+ */
 public class PhotoHelper {
 
     public static final int NONE = 0;                                       //  随意图片类型
@@ -30,7 +37,6 @@ public class PhotoHelper {
 
     /**
      * 从系统相册中选取照片上传
-     *
      * @param activity
      */
     public static void selectPictureFromAlbum(Activity activity) {
@@ -43,7 +49,6 @@ public class PhotoHelper {
 
     /**
      * 从系统相册中选取照片上传
-     *
      * @param fragment
      */
     public static void selectPictureFromAlbum(Fragment fragment) {
@@ -56,7 +61,6 @@ public class PhotoHelper {
 
     /**
      * 拍照
-     *
      * @param activity
      */
     public static void photograph(Activity activity) {
@@ -74,7 +78,6 @@ public class PhotoHelper {
 
     /**
      * 拍照
-     *
      * @param fragment
      */
     public static void photograph(Fragment fragment) {
@@ -92,7 +95,6 @@ public class PhotoHelper {
 
     /**
      * 图片裁剪
-     *
      * @param activity
      * @param uri
      */
@@ -115,7 +117,6 @@ public class PhotoHelper {
 
     /**
      * 图片裁剪
-     *
      * @param activity
      * @param uri      原图的地址
      * @param height   指定的剪辑图片的高
@@ -143,7 +144,6 @@ public class PhotoHelper {
 
     /**
      * 图片裁剪
-     *
      * @param activity
      * @param uri      原图的地址
      * @param height   指定的剪辑图片的高
@@ -166,7 +166,6 @@ public class PhotoHelper {
 
     /**
      * 图片裁剪
-     *
      * @param fragment
      * @param uri
      * @param height
@@ -188,7 +187,6 @@ public class PhotoHelper {
 
     /**
      * 将图片路径转化为Uri
-     *
      * @param path
      * @return
      */
@@ -204,7 +202,6 @@ public class PhotoHelper {
 
     /**
      * 获取当前系统时间并格式化
-     *
      * @return
      */
     public static String getStringToday() {
@@ -216,7 +213,6 @@ public class PhotoHelper {
 
     /**
      * 制作图片的路径地址
-     *
      * @param context
      * @return
      */
@@ -245,7 +241,6 @@ public class PhotoHelper {
 
     /**
      * 按比例获取bitmap
-     *
      * @param path
      * @param w
      * @param h
@@ -274,7 +269,6 @@ public class PhotoHelper {
 
     /**
      * 获取原图bitmap
-     *
      * @param path
      * @return
      */
@@ -291,7 +285,6 @@ public class PhotoHelper {
 
     /**
      * 通过Uri删除图片
-     *
      * @param activity
      * @param uri
      */
@@ -309,7 +302,6 @@ public class PhotoHelper {
 
     /**
      * 通过Uri获取图片真实路径
-     *
      * @param context
      * @param uri
      * @return
@@ -340,7 +332,6 @@ public class PhotoHelper {
 
     /**
      * 裁剪图片为缩略图
-     *
      * @param activity
      * @param imageUri
      * @return

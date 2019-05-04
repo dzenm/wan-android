@@ -8,7 +8,11 @@ import com.din.helper.file.FileHelper;
 import java.io.*;
 
 /**
- * log日志统计保存
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 打印日志以及log日志统计保存
  */
 public class Logger {
 

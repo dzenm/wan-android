@@ -10,7 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.din.helper.R;
 
-public class UpGradeDialog extends BaseDialog implements View.OnClickListener, LoadProgress.OnLoadListener {
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 更新提示的Dialog
+ */
+public class UpGradeDialog extends AbsDialog implements View.OnClickListener, LoadProgress.OnLoadListener {
 
     /*
      * 顶部的图片
@@ -107,7 +114,7 @@ public class UpGradeDialog extends BaseDialog implements View.OnClickListener, L
     }
 
     @Override
-    protected BaseDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
+    protected AbsDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
         lp.width = (int) (getDisplayWidth() * 0.7);
         return this;
     }

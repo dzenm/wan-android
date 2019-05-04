@@ -10,7 +10,14 @@ import com.din.helper.R;
 
 import java.util.TimerTask;
 
-public class PromptDialog extends BaseDialog {
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 处理结果的提示框以及加载框
+ */
+public class PromptDialog extends AbsDialog {
 
     /*
      * 延时关闭dialog的时间
@@ -146,7 +153,7 @@ public class PromptDialog extends BaseDialog {
     }
 
     @Override
-    public BaseDialog build() {
+    public AbsDialog build() {
         super.build();
         setCancelable(isCancel);                                        // 设置不可通过返回键取消dialog
         if (isShowBrief) {                                              // 是否简短的显示之后取消
@@ -197,7 +204,7 @@ public class PromptDialog extends BaseDialog {
     }
 
     @Override
-    protected BaseDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
+    protected AbsDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
         lp.bottomMargin = dp2px(mMargin);
         lp.topMargin = dp2px(8 * mMargin);
         return this;

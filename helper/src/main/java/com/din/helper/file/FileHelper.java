@@ -15,22 +15,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -38,6 +23,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 文件操作的工具类
+ */
 public class FileHelper {
 
     private static final String TAG = FileHelper.class.getSimpleName();
@@ -77,7 +69,6 @@ public class FileHelper {
 
     /**
      * 创建该软件的根目录文件夹
-     *
      * @param appName
      */
     private void createAppFolder(String appName) {
@@ -105,7 +96,6 @@ public class FileHelper {
 
     /**
      * 获取应用名称
-     *
      * @return
      */
     public String getAppName(Context context) {
@@ -130,7 +120,6 @@ public class FileHelper {
 
     /**
      * 创建文件夹
-     *
      * @param folderName
      * @return
      */
@@ -164,7 +153,6 @@ public class FileHelper {
 
     /**
      * 存储图片
-     *
      * @param bitmap
      */
     public boolean savePhoto(Bitmap bitmap, String folder, String photoName) {
@@ -197,7 +185,6 @@ public class FileHelper {
 
     /**
      * 读取图片
-     *
      * @param folder
      * @param photoName
      * @return Bitmap
@@ -225,7 +212,6 @@ public class FileHelper {
 
     /**
      * 存储List数据
-     *
      * @param tArrayList
      */
     public void saveArrayListFile(ArrayList tArrayList, String fileName) {
@@ -246,7 +232,6 @@ public class FileHelper {
 
     /**
      * 获取本地的List数据
-     *
      * @return
      */
     public ArrayList getArrayListFile(String fileName) {
@@ -266,7 +251,6 @@ public class FileHelper {
 
     /**
      * 复制文件到SD卡
-     *
      * @param databaseName 数据库名称
      */
     public boolean copyDBToSDcard(Activity activity, String databaseName) {
@@ -282,7 +266,6 @@ public class FileHelper {
 
     /**
      * 复制文件到SD卡
-     *
      * @param databaseName 数据库名称
      */
     public boolean copySDcardToDB(Activity activity, String databaseName) {
@@ -297,7 +280,6 @@ public class FileHelper {
 
     /**
      * 复制文件
-     *
      * @param oldPath
      * @param newPath
      */
@@ -330,7 +312,6 @@ public class FileHelper {
 
     /**
      * 删除文件
-     *
      * @param context  程序上下文
      * @param fileName 文件名，要在系统内保持唯一
      * @return boolean 存储成功的标志
@@ -341,7 +322,6 @@ public class FileHelper {
 
     /**
      * 文件是否存在
-     *
      * @param context
      * @param fileName
      * @return
@@ -352,7 +332,6 @@ public class FileHelper {
 
     /**
      * 存储文本数据
-     *
      * @param context  程序上下文
      * @param fileName 文件名，要在系统内保持唯一
      * @param content  文本内容
@@ -376,7 +355,6 @@ public class FileHelper {
 
     /**
      * 存储文本数据
-     *
      * @param content 文本内容
      * @return boolean 存储成功的标志
      */
@@ -398,7 +376,6 @@ public class FileHelper {
 
     /**
      * 读取文本数据
-     *
      * @return String, 读取到的文本内容，失败返回null
      */
     public String readFile(String filePath) {
@@ -431,7 +408,6 @@ public class FileHelper {
 
     /**
      * 读取文本数据
-     *
      * @param fileName 文件名
      * @return String, 读取到的文本内容，失败返回null
      */
@@ -463,7 +439,6 @@ public class FileHelper {
 
     /**
      * 存储单个Parcelable对象
-     *
      * @param fileName     文件名，要在系统内保持唯一
      * @param parcelObject 对象必须实现Parcelable
      * @return boolean 存储成功的标志
@@ -487,7 +462,6 @@ public class FileHelper {
 
     /**
      * 存储List对象
-     *
      * @param fileName 文件名，要在系统内保持唯一
      * @param list     对象数组集合，对象必须实现Parcelable
      * @return boolean 存储成功的标志
@@ -513,7 +487,6 @@ public class FileHelper {
 
     /**
      * 存储单个数据对象
-     *
      * @param fileName 文件名
      * @return Parcelable, 读取到的Parcelable对象，失败返回null
      */
@@ -548,7 +521,6 @@ public class FileHelper {
 
     /**
      * 存储数据对象列表
-     *
      * @param fileName 文件名
      * @return List, 读取到的对象数组，失败返回null
      */
@@ -583,7 +555,6 @@ public class FileHelper {
 
     /**
      * 存储数据对象列表
-     *
      * @param fileName 文件名
      * @return List, 读取到的对象数组，失败返回null
      */
@@ -602,7 +573,6 @@ public class FileHelper {
 
     /**
      * 读取数据对象列表
-     *
      * @param fileName 文件名
      * @return Serializable, 读取到的序列化对象
      */
@@ -621,7 +591,6 @@ public class FileHelper {
 
     /**
      * 从assets里边读取字符串
-     *
      * @param fileName
      * @return
      */
@@ -643,7 +612,6 @@ public class FileHelper {
 
     /**
      * 获取二进制文件流
-     *
      * @param fileName
      * @return
      */
@@ -670,7 +638,6 @@ public class FileHelper {
 
     /**
      * drawable转Bitmap
-     *
      * @param drawable
      * @return
      */
@@ -686,7 +653,6 @@ public class FileHelper {
 
     /**
      * Bitmap转二进制
-     *
      * @param bitmap
      * @return
      */
@@ -704,7 +670,6 @@ public class FileHelper {
 
     /**
      * Save content to specified file.
-     *
      * @param filePath file path indicate the file which be written content.
      * @param content
      * @return if save success, return true, otherwise return false.
@@ -725,7 +690,6 @@ public class FileHelper {
 
     /**
      * Writing content to file.
-     *
      * @param file
      * @param content
      */
@@ -743,7 +707,6 @@ public class FileHelper {
 
     /**
      * Read content from specified path.
-     *
      * @param pathName pathName of file
      * @return
      */

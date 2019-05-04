@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageView">
+        <attr name="isCircle" format="boolean" />
+        <attr name="isCoverImage" format="boolean" />
+
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+        <attr name="innerBorderWidth" format="dimension" />
+        <attr name="innerBorderColor" format="color" />
+
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="topLeftCornerRadius" format="dimension" />
+        <attr name="topRightCornerRadius" format="dimension" />
+        <attr name="bottomLeftCornerRadius" format="dimension" />
+        <attr name="bottomRightCornerRadius" format="dimension" />
+
+        <attr name="maskColor" format="color" />
+    </declare-styleable>
+</resources>

@@ -12,8 +12,7 @@ open abstract class BaseFragment : Fragment() {
 
     protected var isViewInitiated = false               // 数据是否初始化
     protected var isViewCreated = false                 // 页面是否加载完成
-    protected var isFetchPrepared = false
-    protected var isFirstPage = false
+    protected var isFetchPrepared = false               // 是否进行了懒加载
 
     protected lateinit var rootView: View
 
@@ -23,6 +22,8 @@ open abstract class BaseFragment : Fragment() {
 
     open fun lazyPrepareFetchData() {}                  // 懒加载数据
 
+    open fun getFirstPage(): Boolean = false            // 只有在一组Fragment切换的时候，加载第一个的时候不能进行懒加载
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = LayoutInflater.from(activity).inflate(layoutId(), container, false)
         rootView?.let { initiatedView() }               // 初始化控件
@@ -31,24 +32,37 @@ open abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        isViewCreated = true;                           // onViewCreate方法调用之后将标志设为true
-        if (isFirstPage) {
+        isViewCreated = true                            // onViewCreate方法调用之后将标志设为true
+        if (getFirstPage()) {
             lazyPrepareFetchData()
+            isFetchPrepared = true
         }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser && isViewCreated && !isFetchPrepared) {         // 页面可见并且onViewCreate()方法调用
-            if (!isFirstPage) {                         // 调用懒加载数据方法
-                lazyPrepareFetchData()
+        if (isViewCreated && isVisibleToUser) {         // 是否调用onViewCreated并且页面是否可见
+            if (!isFetchPrepared) {                     // 是否加载过数据
+                if (!getFirstPage()) {                  // 调用懒加载数据方法
+                    lazyPrepareFetchData()
+                    isFetchPrepared = true
+                }
+            } else {                                    // Fragment从不可见到可见，但是Fragment是已经创建之后
+                onRestart()
             }
-            isFetchPrepared = true
         }
+    }
+
+    /**
+     * 页面已经创建，从一个可见的Fragment切换到不可见的Fragment（不可见的Fragment为本Fragment）
+     */
+    protected open fun onRestart() {
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        isViewCreated = false;      // View被Destroy之后将标志设为false
+        isViewCreated = false                           // View被Destroy之后将标志设为false
+        isFetchPrepared = false
     }
 }

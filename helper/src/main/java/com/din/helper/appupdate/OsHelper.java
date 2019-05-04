@@ -1,4 +1,4 @@
-package com.din.helper.util;
+package com.din.helper.appupdate;
 
 import android.app.Activity;
 import android.content.pm.PackageInfo;

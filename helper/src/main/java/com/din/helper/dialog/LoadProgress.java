@@ -13,6 +13,13 @@ import android.util.TypedValue;
 import android.view.View;
 import com.din.helper.R;
 
+/**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * 自定义的进度条加载进度
+ */
 public class LoadProgress extends View {
 
     /*
@@ -118,10 +125,10 @@ public class LoadProgress extends View {
     }
 
     {
-        mPaintLineBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintTextBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintLineBackground = new Paint();
+        mPaintLine = new Paint();
+        mPaintTextBackground = new Paint();
+        mPaintText = new Paint();
         mBound = new Rect();
         paddingLeft = dip(2);
         paddingRight = dip(2);
@@ -146,6 +153,7 @@ public class LoadProgress extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // 根据文字的位置设置文字的Rect大小
+        mPaintText.setAntiAlias(true);
         mPaintText.setColor(mLineColor);                                    // 设置绘制百分比文字属性
         mPaintText.setTextSize(mTextSize);
         mText = mCurrentValue + "%";
@@ -175,18 +183,15 @@ public class LoadProgress extends View {
 
 
         // 绘制进度条的底色
-        mPaintLineBackground.setColor(getResources().getColor(R.color.colorGray));
-        mPaintLineBackground.setStrokeWidth(mLineHeight);
+        setPaint(mPaintLineBackground, getResources().getColor(R.color.colorGray));
         canvas.drawLine(0, lineOffsetTop, darkLineWidth, lineOffsetTop, mPaintLineBackground);
 
         // 绘制进度条已进行的颜色
-        mPaintLine.setColor(mLineColor);
-        mPaintLine.setStrokeWidth(mLineHeight);
+        setPaint(mPaintLine, mLineColor);
         canvas.drawLine(0, lineOffsetTop, executeLineWidth, lineOffsetTop, mPaintLine);
 
         // 绘制百分比文字的背景白色区域
-        mPaintTextBackground.setColor(Color.WHITE);
-        mPaintTextBackground.setStrokeWidth(mLineHeight);
+        setPaint(mPaintTextBackground, Color.WHITE);
         canvas.drawLine(whiteBgStart, lineOffsetTop, whiteBgStop, lineOffsetTop, mPaintTextBackground);
 
         // 绘制文字
@@ -196,6 +201,20 @@ public class LoadProgress extends View {
         if (mCurrentValue == mMaxValue) {
             onLoadListener.onFinished();
         }
+    }
+
+    /**
+     * 设置画笔样式
+     * @param paint
+     * @param color
+     * @param lineHeight
+     * @return
+     */
+    private void setPaint(Paint paint, int color) {
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(mLineHeight);
     }
 
     @Override

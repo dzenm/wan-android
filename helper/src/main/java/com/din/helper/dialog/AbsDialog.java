@@ -7,9 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.*;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatDialog;
 import com.din.helper.R;
 
 import java.util.Timer;
@@ -17,8 +18,12 @@ import java.util.TimerTask;
 
 /**
  * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
+ * Dialog的抽象类
  */
-public abstract class BaseDialog extends AlertDialog {
+public abstract class AbsDialog extends AppCompatDialog {
 
     /*
      * root view
@@ -92,7 +97,7 @@ public abstract class BaseDialog extends AlertDialog {
      * @param margin
      * @return
      */
-    public BaseDialog setMargin(int margin) {
+    public AbsDialog setMargin(int margin) {
         mMargin = margin;
         isDefaultMargin = false;
         return this;
@@ -103,7 +108,7 @@ public abstract class BaseDialog extends AlertDialog {
      * @param gravity
      * @return
      */
-    public BaseDialog setGravity(int gravity) {
+    public AbsDialog setGravity(int gravity) {
         mGravity = gravity;
         isDefaultGravity = false;
         isCenter = false;
@@ -115,7 +120,7 @@ public abstract class BaseDialog extends AlertDialog {
      * @param animator
      * @return
      */
-    public BaseDialog setAnimator(int animator) {
+    public AbsDialog setAnimator(int animator) {
         mAnimator = animator;
         isDefaultAnimator = false;
         return this;
@@ -126,7 +131,7 @@ public abstract class BaseDialog extends AlertDialog {
      * @param background
      * @return
      */
-    public BaseDialog setBackground(int background) {
+    public AbsDialog setBackground(int background) {
         mBackground = background;
         isDefaultBackground = false;
         return this;
@@ -136,18 +141,18 @@ public abstract class BaseDialog extends AlertDialog {
      * Dialog矩形背景
      * @return
      */
-    public BaseDialog setBackgroundRectangle() {
-        this.setBackground(Color.WHITE);
+    public AbsDialog setBackgroundRectangle() {
+        setBackground(Color.WHITE);
         return this;
     }
 
     /**
      * Dialog背景的灰色区域透明
-     * @param isTranslucent
+     * @param translucent
      * @return
      */
-    public BaseDialog setTranslucent(boolean isTranslucent) {
-        this.isTranslucent = isTranslucent;
+    public AbsDialog setTranslucent(boolean translucent) {
+        isTranslucent = translucent;
         return this;
     }
 
@@ -158,7 +163,7 @@ public abstract class BaseDialog extends AlertDialog {
      * 其他有关View的操作在 super.apply() 之后调用
      * @return
      */
-    public BaseDialog build() {
+    public AbsDialog build() {
         setDialogSize();
         setStyle();
         setWindowProperty();
@@ -169,7 +174,7 @@ public abstract class BaseDialog extends AlertDialog {
 
     /************************************* 以下为实现细节（不可见方法） *********************************/
 
-    public BaseDialog(@NonNull Context context) {
+    public AbsDialog(@NonNull Context context) {
         super(context, R.style.BaseDialog);
         mGravity = Gravity.CENTER;
         mAnimator = AnimatorHelper.shrink();
@@ -192,7 +197,7 @@ public abstract class BaseDialog extends AlertDialog {
     /**
      * 设置默认的效果
      */
-    protected BaseDialog setStyle() {
+    protected AbsDialog setStyle() {
         if (isDefaultMargin) {
             if (mGravity == Gravity.TOP) {
                 if (isDefaultBackground) {
@@ -223,10 +228,20 @@ public abstract class BaseDialog extends AlertDialog {
     }
 
     /**
+     * 供子类查找id
+     * @param id
+     * @param <T>
+     * @return
+     */
+    public <T extends View> T findViewById(@IdRes int id) {
+        return mView.findViewById(id);
+    }
+
+    /**
      * 初始化dialog的大小
      * @return
      */
-    private BaseDialog setDialogSize() {
+    private AbsDialog setDialogSize() {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mView.getLayoutParams();
         setDialogLayoutParams(lp);
         mView.setLayoutParams(lp);
@@ -237,7 +252,7 @@ public abstract class BaseDialog extends AlertDialog {
      * 设置dialog的LayoutParams
      * @return
      */
-    protected BaseDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
+    protected AbsDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
         if (!isCenter) {
             lp.width = getDisplayWidth() - dp2px(2 * mMargin);
             lp.bottomMargin = dp2px(mMargin);
@@ -246,7 +261,11 @@ public abstract class BaseDialog extends AlertDialog {
         return this;
     }
 
-    protected BaseDialog setWindowProperty() {
+    /**
+     * 设置Windows的属性
+     * @return
+     */
+    protected AbsDialog setWindowProperty() {
         Window window = getWindow();
         window.setGravity(mGravity);                                  // 显示的位置
         window.setWindowAnimations(mAnimator);                        // 窗口动画
@@ -254,7 +273,11 @@ public abstract class BaseDialog extends AlertDialog {
         return this;
     }
 
-    protected BaseDialog afterShowSetting() {
+    /**
+     * Dialog调用show方法之后的一些设置
+     * @return
+     */
+    protected AbsDialog afterShowSetting() {
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);  // 解决ALertDialog无法弹出软键盘,且必须放在AlertDialog的show方法之后
@@ -295,7 +318,7 @@ public abstract class BaseDialog extends AlertDialog {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
-    public interface OnDialogClickListener<T extends BaseDialog> {
+    public interface OnDialogClickListener<T extends AbsDialog> {
         /**
          * @param dialog  Dialog
          * @param confirm 是否是确定按钮，通过这个判断点击的是哪个按钮

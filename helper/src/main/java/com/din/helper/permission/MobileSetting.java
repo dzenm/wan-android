@@ -10,22 +10,35 @@ import android.provider.Settings;
 import android.util.Log;
 
 /**
+ * @author dinzhenyan
+ * @date 2019-04-30 20:03
+ * @IDE Android Studio
+ * <p>
  * 权限设置页（兼容大部分国产手机）
  */
 public final class MobileSetting {
 
     private static final String TAG = MobileSetting.class.getSimpleName();
 
+    /*
+     * 华为手机的一些包名常量
+     */
     private static final String HUAWEI_PACKAGE = "com.huawei.systemmanager";
     private static final String HUAWEI_UI_PERMISSION = "com.huawei.permissionmanager.ui.MainActivity";
     private static final String HUAWEI_UI_SYSTEM = "com.huawei.systemmanager.addviewmonitor.AddViewMonitorActivity";
     private static final String HUAWEI_UI_NOTIFICATION = "com.huawei.notificationmanager.ui.NotificationManagmentActivity";
 
+    /*
+     * 小米手机的一些包名常量
+     */
     private static final String MIUI_INTENT = "miui.intent.action.APP_PERM_EDITOR";
     private static final String MIUI_PACKAGE = "com.miui.securitycenter";
     private static final String MIUI_UI_APP_PERMISSION = "com.miui.permcenter.permissions.AppPermissionsEditorActivity";
     private static final String MIUI_UI_PERMISSION = "com.miui.permcenter.permissions.PermissionsEditorActivity";
 
+    /*
+     * OPPO手机的一些包名常量
+     */
     private static final String OPPO_PACKAGE_COLOR = "com.color.safecenter";
     private static final String OPPO_PACKAGE_COLOR_OS = "com.coloros.safecenter";
     private static final String OPPO_PACKAGE_OPPO = "com.oppo.safe";
@@ -33,10 +46,16 @@ public final class MobileSetting {
     private static final String OPPO_UI_SYS = "com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity";
     private static final String OPPO_UI_SAFE = "com.oppo.safe.permission.PermissionAppListActivity";
 
+    /*
+     * VIVO手机的一些包名常量
+     */
     private static final String VIVO_PACKAGE = "com.iqoo.secure";
     private static final String VIVO_UI_SECURE_PHONE = "com.iqoo.secure.ui.phoneoptimize.FloatWindowManager";
     private static final String VIVO_UI_SAFE_PERMISSION = "com.iqoo.secure.safeguard.SoftPermissionDetailActivity";
 
+    /*
+     * 魅族手机的一些包名常量
+     */
     private static final String MEIZU_INTENT = "com.meizu.safe.security.SHOW_APPSEC";
     private static final String MEIZU_PACKAGE = "com.meizu.safe";
     private static final String MEIZU_UI_PERMISSION = "com.meizu.safe.security.AppSecActivity";
@@ -45,7 +64,6 @@ public final class MobileSetting {
 
     /**
      * 获取手机厂商名称
-     *
      * @return
      */
     public static String mark() {
@@ -54,7 +72,6 @@ public final class MobileSetting {
 
     /**
      * 一般手机通过该方法打开设置界面
-     *
      * @param activity
      * @return
      */
@@ -64,6 +81,11 @@ public final class MobileSetting {
         return intent;
     }
 
+    /**
+     * 跳转华为设置页面的Intent
+     * @param activity
+     * @return
+     */
     public static Intent huawei(Activity activity) {
         Intent intent = new Intent();
         intent.setComponent(new ComponentName(HUAWEI_PACKAGE, HUAWEI_UI_PERMISSION));
@@ -76,6 +98,11 @@ public final class MobileSetting {
         return intent;
     }
 
+    /**
+     * 跳转小米设置页面的Intent
+     * @param activity
+     * @return
+     */
     public static Intent xiaomi(Activity activity) {
         Intent intent = new Intent(MIUI_INTENT);
         intent.putExtra("extra_pkgname", activity.getPackageName());
@@ -91,6 +118,11 @@ public final class MobileSetting {
         return intent;
     }
 
+    /**
+     * 跳转OPPO设置页面的Intent
+     * @param activity
+     * @return
+     */
     public static Intent oppo(Activity activity) {
         Intent intent = new Intent();
         intent.putExtra(DEFAULT_PACKAGE, activity.getPackageName());
@@ -106,6 +138,11 @@ public final class MobileSetting {
         return intent;
     }
 
+    /**
+     * 跳转VIVO设置页面的Intent
+     * @param activity
+     * @return
+     */
     public static Intent vivo(Activity activity) {
         Intent intent = new Intent();
         intent.setClassName(VIVO_PACKAGE, VIVO_UI_SECURE_PHONE);
@@ -116,6 +153,11 @@ public final class MobileSetting {
         return intent;
     }
 
+    /**
+     * 跳转魅族设置页面的Intent
+     * @param activity
+     * @return
+     */
     public static Intent meizu(Activity activity) {
         Intent intent = new Intent(MEIZU_INTENT);
         intent.putExtra(DEFAULT_PACKAGE, activity.getPackageName());
@@ -126,7 +168,6 @@ public final class MobileSetting {
 
     /**
      * 跳转到应用权限设置页面
-     *
      * @param activity
      * @param isNewTask 是否使用新的任务栈启动
      * @return
@@ -155,7 +196,6 @@ public final class MobileSetting {
 
     /**
      * 是否存在该Intent
-     *
      * @param activity
      * @param intent   判断的Intent
      * @return

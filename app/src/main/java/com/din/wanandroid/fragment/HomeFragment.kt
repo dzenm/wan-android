@@ -9,7 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.din.banner.ScrollerPage
+import com.din.banner.limited.ScrollerPage
 import com.din.wanandroid.R
 import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.ArticleAdapter
@@ -69,12 +69,12 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
         fetchData()
     }
 
-    override fun scrollToLastVisibleItem(lastPosition: Int) {
+    override fun onLastItem(lastPosition: Int) {
         adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_LOADING)
         fetchListData(lastPosition, true)
     }
 
-    override fun swipeToRefresh() {
+    override fun swipeRefreshing() {
         fetchListData(0, false)
     }
 

@@ -22,11 +22,11 @@ class TreeFragment : RecycleFragment(), MultipleAdapter.OnItemClickListener {
 
     override fun layoutId(): Int = R.layout.fragment_tree
 
-    override fun scrollToLastVisibleItem(lastPosition: Int) {
+    override fun onLastItem(lastPosition: Int) {
 
     }
 
-    override fun swipeToRefresh() {
+    override fun swipeRefreshing() {
         page = 0
         fetchData()
     }

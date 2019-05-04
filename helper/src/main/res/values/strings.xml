@@ -1,4 +1,5 @@
 <resources>
+    <!-- ======================== 字符串 ========================= -->
     <string name="app_name">Helper</string>
     <!--drawerlayout navigation-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -13,7 +14,8 @@
 
     <string name="dialog_up_grade">升级</string>
 
-    <!--颜色-->
+
+    <!-- ======================== 颜色 ========================= -->
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightGray">#EFEFEF</color>
     <color name="colorGray">#DEDEDE</color>
