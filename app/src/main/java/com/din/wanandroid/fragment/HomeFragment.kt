@@ -15,16 +15,17 @@ import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.ArticleAdapter
 import com.din.wanandroid.api.Api
 import com.din.wanandroid.api.CollectHelper
-import com.din.wanandroid.api.HomeApi
 import com.din.wanandroid.base.BaseAdapter
 import com.din.wanandroid.model.ArticleModel
 import com.din.wanandroid.model.BannerModel
+import com.din.wanandroid.model.BaseModel
 import com.din.wanandroid.model.TopModel
 import rx.Observer
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, SearchView.OnQueryTextListener {
+class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
+    BaseAdapter.OnItemClickListener<ArticleModel.Datas> {
 
     private var adapter: ArticleAdapter = ArticleAdapter()       // RecyclerView Adapter
 
@@ -80,16 +81,15 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
 
     fun fetchData() {
         // 获取banner图
-        Api.getRetrofit()
-            .create(HomeApi::class.java)
+        Api.getService()
             .getBanner()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BannerModel> {
+            .subscribe(object : Observer<BaseModel<MutableList<BannerModel>>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: BannerModel?) {
+                override fun onNext(t: BaseModel<MutableList<BannerModel>>?) {
                     if (t!!.errorCode == 0) {
                         val datas = t.data
                         for (i in datas.indices) {
@@ -110,16 +110,15 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
      * 拉取置顶数据
      */
     fun fetchTopData() {
-        Api.getRetrofit()
-            .create(HomeApi::class.java)
+        Api.getService()
             .getTop()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<TopModel> {
+            .subscribe(object : Observer<BaseModel<MutableList<TopModel>>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: TopModel?) {
+                override fun onNext(t: BaseModel<MutableList<TopModel>>?) {
                     if (isFirstStart) {
                         if (t!!.errorCode == 0) {
                             val datas = t.data
@@ -144,15 +143,14 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
         if (!isLoadMore) {
             promptDialog.showLoadingPoint()
         }
-        Api.getRetrofit()
-            .create(HomeApi::class.java)
+        Api.getService()
             .getArticle(page.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<ArticleModel> {
+            .subscribe(object : Observer<BaseModel<ArticleModel>> {
                 override fun onError(e: Throwable?) {}
 
-                override fun onNext(t: ArticleModel?) {
+                override fun onNext(t: BaseModel<ArticleModel>?) {
                     if (t!!.errorCode == 0) {
                         val datas = t.data.datas
                         val pageCount = t.data.pageCount
@@ -192,14 +190,14 @@ class HomeFragment : RecycleFragment(), ArticleAdapter.OnItemClickListener, Sear
     /**
      * item点击事件
      */
-    override fun onItemClick(bean: ArticleModel.Data.Datas, position: Int) {
+    override fun onItemClick(bean: ArticleModel.Datas, position: Int) {
         val intent = Intent(activity, WebActivity::class.java)
         intent.putExtra("title", bean.title)
         intent.putExtra("url", bean.link)
         startActivity(intent)
     }
 
-    override fun onItemCollectClick(bean: ArticleModel.Data.Datas, position: Int) {
+    override fun onItemCollectClick(bean: ArticleModel.Datas, position: Int) {
         if (bean.collect) {
             activity?.let { CollectHelper.uncollect(it, bean.id) }
             bean.collect = false

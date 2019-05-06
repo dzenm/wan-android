@@ -14,28 +14,12 @@ import com.din.wanandroid.model.CollectModel
  * @date   2019-04-25 16:08
  * @IDE    Android Studio
  */
-class CollectAdapter : BaseAdapter<CollectModel.Data.Datas>() {
+class CollectAdapter : BaseAdapter<CollectModel.Datas>() {
 
     private lateinit var onItemClickListener: OnItemClickListener       // 点击事件
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
-    }
-
-    /**
-     * 添加更多的数据
-     */
-    fun addData(collectBeans: MutableList<CollectModel.Data.Datas>, position: Int) {
-        this.beans?.addAll(collectBeans)
-        notifyItemRangeInserted(position + 1, collectBeans.size)    // 添加完数据刷新
-    }
-
-    /**
-     * 设置底部加载的状态
-     */
-    fun setLoadingStatus(status: Int) {
-        this.loadStatus = status
-        notifyItemRangeChanged(beans.size, 1)
     }
 
     class ContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -59,6 +43,7 @@ class CollectAdapter : BaseAdapter<CollectModel.Data.Datas>() {
     override fun getItemCount(): Int = beans?.size + ITEM_FOOTER_COUNT ?: 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         if (holder is ContentViewHolder) {
             if (position >= beans.size) {
                 return
@@ -77,14 +62,12 @@ class CollectAdapter : BaseAdapter<CollectModel.Data.Datas>() {
                 onItemClickListener?.let { it?.onItemLongClick(beans.get(position), position) }
                 true
             }
-        } else if (holder is FooterViewHolder) {
-            setFooterData(holder)
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(bean: CollectModel.Data.Datas, position: Int)
+        fun onItemClick(bean: CollectModel.Datas, position: Int)
 
-        fun onItemLongClick(bean: CollectModel.Data.Datas, position: Int)
+        fun onItemLongClick(bean: CollectModel.Datas, position: Int)
     }
 }

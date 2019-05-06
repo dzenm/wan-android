@@ -6,9 +6,9 @@ import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.adapter.TabAdapter
 import com.din.wanandroid.api.Api
-import com.din.wanandroid.api.ProjectApi
 import com.din.wanandroid.base.BaseActivity
 import com.din.wanandroid.fragment.ProjectTabItemFragment
+import com.din.wanandroid.model.BaseModel
 import com.din.wanandroid.model.ProjectTypeModel
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_tables.*
@@ -27,16 +27,15 @@ class TablesActivity : BaseActivity() {
     override fun initView() {
         promptDialog = PromptDialog.newInstance(this)
         promptDialog.showLoadingPoint()
-        Api.getRetrofit()
-            .create(ProjectApi::class.java)
+        Api.getService()
             .getProjectType()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<ProjectTypeModel> {
+            .subscribe(object : Observer<BaseModel<MutableList<ProjectTypeModel>>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: ProjectTypeModel?) {
+                override fun onNext(t: BaseModel<MutableList<ProjectTypeModel>>?) {
                     val datas = t!!.data
                     initTab(datas)
                 }
@@ -46,7 +45,7 @@ class TablesActivity : BaseActivity() {
             })
     }
 
-    private fun initTab(datas: MutableList<ProjectTypeModel.Data>) {
+    private fun initTab(datas: MutableList<ProjectTypeModel>) {
         // Tab Title
         val titles: MutableList<String> = mutableListOf()
         val fragments: MutableList<Fragment> = arrayListOf()

@@ -12,21 +12,23 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object Api {
 
-    fun getDefaultRetrofit(): Retrofit {
+    fun getDefaultService(): ApiServices {
         return Retrofit.Builder()
-            .baseUrl(UserApi.BASE_URL)
+            .baseUrl(ApiServices.BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .client(client())
             .build()
+            .create(ApiServices::class.java)
     }
 
-    fun getRetrofit(): Retrofit {
+    fun getService(): ApiServices {
         return Retrofit.Builder()
-            .baseUrl(UserApi.BASE_URL)
+            .baseUrl(ApiServices.BASE_URL)
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client())
             .build()
+            .create(ApiServices::class.java)
     }
 
     private fun client(): OkHttpClient {

@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.api.Api
-import com.din.wanandroid.api.UserApi
 import com.din.wanandroid.model.UserModel
 import com.din.wanandroid.util.getLoginState
 import com.din.wanandroid.util.setLoginState
@@ -110,8 +109,7 @@ class LoginActivity : AppCompatActivity() {
      * POST登录验证
      */
     private fun startLogin(username: String, password: String) {
-        Api.getDefaultRetrofit()
-            .create(UserApi::class.java)
+        Api.getDefaultService()
             .login(username, password)
             .enqueue(object : Callback<String> {
                 override fun onFailure(call: Call<String>, t: Throwable) {
@@ -138,8 +136,7 @@ class LoginActivity : AppCompatActivity() {
      * POST注册验证
      */
     private fun startRegister(username: String, password: String, repassword: String) {
-        Api.getDefaultRetrofit()
-            .create(UserApi::class.java)
+        Api.getDefaultService()
             .register(username, password, repassword)
             .enqueue(object : Callback<String> {
                 override fun onFailure(call: Call<String>, t: Throwable) {

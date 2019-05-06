@@ -10,10 +10,10 @@ import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.adapter.CollectAdapter
 import com.din.wanandroid.api.Api
-import com.din.wanandroid.api.CollectApi
 import com.din.wanandroid.api.CollectHelper
 import com.din.wanandroid.base.BaseActivity
 import com.din.wanandroid.base.BaseAdapter
+import com.din.wanandroid.model.BaseModel
 import com.din.wanandroid.model.CollectModel
 import kotlinx.android.synthetic.main.activity_collect.*
 import rx.Observer
@@ -26,7 +26,7 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
     private lateinit var promptDialog: PromptDialog             // 加载提示框
     private var page: Int = 0                                   // 加载的页数
     private lateinit var infoDialog: InfoDialog
-    private lateinit var beans: MutableList<CollectModel.Data.Datas>
+    private lateinit var beans: MutableList<CollectModel.Datas>
 
     override fun layoutId(): Int = R.layout.activity_collect
 
@@ -70,15 +70,14 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
         if (!isLoadMore) {
             promptDialog.showLoadingPoint()
         }
-        Api.getRetrofit()
-            .create(CollectApi::class.java)
+        Api.getService()
             .getCollects(page.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<CollectModel> {
+            .subscribe(object : Observer<BaseModel<CollectModel>> {
                 override fun onError(e: Throwable?) {}
 
-                override fun onNext(t: CollectModel?) {
+                override fun onNext(t: BaseModel<CollectModel>?) {
                     if (t!!.errorCode == 0) {
                         beans = t.data.datas
                         val pageCount = t.data.pageCount
@@ -107,21 +106,21 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
     /**
      * item点击事件
      */
-    override fun onItemClick(bean: CollectModel.Data.Datas, position: Int) {
+    override fun onItemClick(bean: CollectModel.Datas, position: Int) {
         val intent = Intent(this, WebActivity::class.java)
         intent.putExtra("title", bean.title)
         intent.putExtra("url", bean.link)
         startActivity(intent)
     }
 
-    override fun onItemLongClick(bean: CollectModel.Data.Datas, position: Int) {
+    override fun onItemLongClick(bean: CollectModel.Datas, position: Int) {
         infoDialog.setInfo("")
             .setContent("是否取消收藏？")
             .setOnDialogClickListener { dialog, confirm ->
                 if (confirm) {
                     CollectHelper.uncollect(this, bean.id)
                     beans.removeAt(position)
-                    adapter.notifyItemRangeRemoved(position,1)
+                    adapter.notifyItemRangeRemoved(position, 1)
                 } else {
                     dialog.dismiss()
                 }

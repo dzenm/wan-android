@@ -8,7 +8,7 @@ import com.din.wanandroid.activities.TablesActivity
 import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.MultipleAdapter
 import com.din.wanandroid.api.Api
-import com.din.wanandroid.api.ProjectApi
+import com.din.wanandroid.model.BaseModel
 import com.din.wanandroid.model.MultipleTitleBean
 import com.din.wanandroid.model.NewProjectModel
 import rx.Observer
@@ -40,16 +40,15 @@ class TreeFragment : RecycleFragment(), MultipleAdapter.OnItemClickListener {
 
     fun fetchData() {
         promptDialog.showLoadingPoint()
-        Api.getRetrofit()
-            .create(ProjectApi::class.java)
+        Api.getService()
             .getNewProject(page.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<NewProjectModel> {
+            .subscribe(object : Observer<BaseModel<NewProjectModel>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: NewProjectModel?) {
+                override fun onNext(t: BaseModel<NewProjectModel>?) {
                     val datas = t!!.data.datas
                     beans.add(MultipleTitleBean("项目"))
                     beans.addAll(datas)
@@ -66,8 +65,8 @@ class TreeFragment : RecycleFragment(), MultipleAdapter.OnItemClickListener {
         if (beans.get(position) is MultipleTitleBean) {
             val intent = Intent(activity, TablesActivity::class.java)
             startActivity(intent)
-        } else if (beans.get(position) is NewProjectModel.Data.Datas) {
-            val bean = beans.get(position) as NewProjectModel.Data.Datas
+        } else if (beans.get(position) is NewProjectModel.Datas) {
+            val bean = beans.get(position) as NewProjectModel.Datas
             val intent = Intent(activity, WebActivity::class.java)
             intent.putExtra("title", bean.title)
             intent.putExtra("url", bean.projectLink)

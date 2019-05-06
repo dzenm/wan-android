@@ -9,7 +9,6 @@ import com.din.wanandroid.R
 import com.din.wanandroid.activities.CollectActivity
 import com.din.wanandroid.activities.LoginActivity
 import com.din.wanandroid.api.Api
-import com.din.wanandroid.api.UserApi
 import com.din.wanandroid.base.BaseFragment
 import com.din.wanandroid.util.deleteLoginFile
 import com.din.wanandroid.util.readUser
@@ -46,8 +45,7 @@ class PersonalFragment : BaseFragment() {
 
         // 点击进行注销
         logout.setOnClickListener {
-            Api.getDefaultRetrofit()
-                .create(UserApi::class.java)
+            Api.getDefaultService()
                 .logout()
                 .enqueue(object : Callback<String> {
                     override fun onFailure(call: Call<String>, t: Throwable) {

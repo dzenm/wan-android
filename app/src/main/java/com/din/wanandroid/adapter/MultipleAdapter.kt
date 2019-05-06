@@ -44,10 +44,10 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int = when (beans.get(position)) {
-        is NewProjectModel.Data.Datas -> TYPE_PROJECT
+        is NewProjectModel.Datas -> TYPE_PROJECT
         is TreeModel.Data -> TYPE_TREE
         is WxModel.Data -> TYPE_WX
-        is NaviModel.Data -> TYPE_NAVI
+        is NaviModel -> TYPE_NAVI
         is MultipleTitleBean -> TYPE_TITLE
         else -> TYPE_DEFAULT
     }
@@ -82,7 +82,7 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ProjectViewHolder -> {
-                val projectBean = beans.get(position) as NewProjectModel.Data.Datas
+                val projectBean = beans.get(position) as NewProjectModel.Datas
                 Glide.with(context).load(projectBean.envelopePic).into(holder.image)
                 holder.title.setText(projectBean.title)
                 var icon: Int

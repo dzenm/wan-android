@@ -10,28 +10,12 @@ import com.din.wanandroid.R
 import com.din.wanandroid.base.BaseAdapter
 import com.din.wanandroid.model.ArticleModel
 
-class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
+class ArticleAdapter : BaseAdapter<ArticleModel.Datas>() {
 
-    private lateinit var onItemClickListener: OnItemClickListener       // 点击事件
+    private lateinit var onItemClickListener: OnItemClickListener<ArticleModel.Datas>       // 点击事件
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener<ArticleModel.Datas>) {
         this.onItemClickListener = onItemClickListener
-    }
-
-    /**
-     * 添加更多的数据
-     */
-    fun addData(articleBeans: MutableList<ArticleModel.Data.Datas>, position: Int) {
-        this.beans?.addAll(articleBeans)
-        notifyItemRangeInserted(position + 1, articleBeans.size)    // 添加完数据刷新
-    }
-
-    /**
-     * 设置底部加载的状态
-     */
-    fun setLoadingStatus(status: Int) {
-        this.loadStatus = status
-        notifyItemRangeChanged(beans.size, 1)
     }
 
     inner class ContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -53,9 +37,8 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
         return super.createViewHolder(parent, viewType)
     }
 
-    override fun getItemCount(): Int = beans?.size + ITEM_FOOTER_COUNT ?: 0
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         if (holder is ContentViewHolder) {
             if (position >= beans.size) {
                 return
@@ -82,15 +65,6 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Data.Datas>() {
             holder.itemView.setOnClickListener {
                 onItemClickListener?.onItemClick(beans.get(position), position)
             }
-        } else if (holder is FooterViewHolder) {
-            setFooterData(holder)
         }
-    }
-
-    interface OnItemClickListener {
-
-        fun onItemCollectClick(bean: ArticleModel.Data.Datas, position: Int)
-
-        fun onItemClick(bean: ArticleModel.Data.Datas, position: Int)
     }
 }

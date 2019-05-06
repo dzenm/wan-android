@@ -9,9 +9,9 @@ import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.ArticleAdapter
 import com.din.wanandroid.api.Api
 import com.din.wanandroid.api.CollectHelper
-import com.din.wanandroid.api.ProjectApi
 import com.din.wanandroid.base.BaseAdapter
 import com.din.wanandroid.model.ArticleModel
+import com.din.wanandroid.model.BaseModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import rx.Observer
 import rx.android.schedulers.AndroidSchedulers
@@ -22,7 +22,8 @@ import rx.schedulers.Schedulers
  * @date   2019-04-26 14:36
  * @IDE    Android Studio
  */
-class ProjectTabItemFragment(var typeId: String) : RecycleFragment(), ArticleAdapter.OnItemClickListener {
+class ProjectTabItemFragment(var typeId: String) : RecycleFragment(),
+    BaseAdapter.OnItemClickListener<ArticleModel.Datas> {
 
     companion object {
         fun newInstance(typeId: String): ProjectTabItemFragment {
@@ -60,15 +61,14 @@ class ProjectTabItemFragment(var typeId: String) : RecycleFragment(), ArticleAda
      * 拉取列表数据
      */
     fun fetchListData(lastPostion: Int, isLoadMore: Boolean) {
-        Api.getRetrofit()
-            .create(ProjectApi::class.java)
+        Api.getService()
             .getProject(page.toString(), typeId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<ArticleModel> {
+            .subscribe(object : Observer<BaseModel<ArticleModel>> {
                 override fun onError(e: Throwable?) {}
 
-                override fun onNext(t: ArticleModel?) {
+                override fun onNext(t: BaseModel<ArticleModel>?) {
                     if (t!!.errorCode == 0) {
                         val datas = t.data.datas
                         val pageCount = t.data.pageCount
@@ -94,7 +94,7 @@ class ProjectTabItemFragment(var typeId: String) : RecycleFragment(), ArticleAda
             })
     }
 
-    override fun onItemCollectClick(bean: ArticleModel.Data.Datas, position: Int) {
+    override fun onItemCollectClick(bean: ArticleModel.Datas, position: Int) {
         if (bean.collect) {
             activity?.let { CollectHelper.uncollect(it, bean.id) }
             bean.collect = false
@@ -104,7 +104,7 @@ class ProjectTabItemFragment(var typeId: String) : RecycleFragment(), ArticleAda
         }
     }
 
-    override fun onItemClick(bean: ArticleModel.Data.Datas, position: Int) {
+    override fun onItemClick(bean: ArticleModel.Datas, position: Int) {
         val intent = Intent(activity, WebActivity::class.java)
         intent.putExtra("title", bean.title)
         intent.putExtra("url", bean.link)

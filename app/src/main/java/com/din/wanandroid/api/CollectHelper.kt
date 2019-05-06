@@ -13,8 +13,7 @@ object CollectHelper {
      * 收藏
      */
     fun collect(context: Context, id: Int) {
-        Api.getRetrofit()
-            .create(CollectApi::class.java)
+        Api.getService()
             .collectArticle(id.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,8 +39,7 @@ object CollectHelper {
      * 取消收藏
      */
     fun uncollect(context: Context, id: Int) {
-        Api.getRetrofit()
-            .create(CollectApi::class.java)
+        Api.getService()
             .uncollectArticle(id.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
