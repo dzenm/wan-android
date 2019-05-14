@@ -4,6 +4,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <include layout="@layout/layout_banner_unlimited" />
+    <com.din.banner.testscroller.ScrollerPage
+            android:id="@+id/scrollerPage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 </LinearLayout>

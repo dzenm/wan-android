@@ -9,12 +9,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />
 
-    <LinearLayout
-            android:id="@+id/pointView"
+    <RelativeLayout
+            android:id="@+id/rl_point_selected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:gravity="center"
-            android:orientation="horizontal" />
+            android:orientation="horizontal">
+        <!--未选中的圆点的布局-->
+        <LinearLayout
+                android:id="@+id/ll_point_unselected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+    </RelativeLayout>
 </RelativeLayout>

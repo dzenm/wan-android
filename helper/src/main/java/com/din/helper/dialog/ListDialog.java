@@ -1,7 +1,6 @@
 package com.din.helper.dialog;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -22,9 +21,9 @@ import com.din.helper.R;
  */
 public class ListDialog extends AbsDialog implements AdapterView.OnItemClickListener, View.OnClickListener {
 
-    private TextView tv_title;
-    private Button bt_cancel;
-    private ListView lv_list;
+    private TextView tvTitle;
+    private Button btCancel;
+    private ListView lvList;
     private ListAdapter adapter;
     private OnItemClickListener onItemClickListener;
 
@@ -46,8 +45,8 @@ public class ListDialog extends AbsDialog implements AdapterView.OnItemClickList
      */
     public ListDialog setTitle(String title) {
         if (!TextUtils.isEmpty(title)) {
-            tv_title.setText(title);
-            tv_title.setVisibility(View.VISIBLE);
+            tvTitle.setText(title);
+            tvTitle.setVisibility(View.VISIBLE);
         }
         return this;
     }
@@ -85,20 +84,15 @@ public class ListDialog extends AbsDialog implements AdapterView.OnItemClickList
     public AbsDialog build() {
         mAnimator = AnimatorHelper.shrink();
         super.build();
-        lv_list.setBackgroundResource(mBackground);
+        lvList.setBackground(mBackground);
         mView.setBackground(null);                  // 设置不必要的背景
         if (isIcon) {                               // 设置数据
             adapter.setData(mTexts, mIcons);
         } else {
             adapter.setData(mTexts);
         }
-        if (isDefaultGravity) {                     // 覆盖父类的设置，重新设置背景
-            bt_cancel.setBackgroundResource(R.drawable.bg_pressed_radius_white);
-        } else {
-            bt_cancel.setBackgroundColor(Color.WHITE);
-        }
-        lv_list.setOnItemClickListener(this);
-        lv_list.setAdapter(adapter);
+        lvList.setOnItemClickListener(this);
+        lvList.setAdapter(adapter);
         return this;
     }
 
@@ -126,10 +120,10 @@ public class ListDialog extends AbsDialog implements AdapterView.OnItemClickList
 
     @Override
     protected void initView() {
-        lv_list = findViewById(R.id.lv_list);
-        tv_title = findViewById(R.id.tv_title);
-        bt_cancel = findViewById(R.id.bt_cancel);
-        bt_cancel.setOnClickListener(this);
+        lvList = findViewById(R.id.lv_list);
+        tvTitle = findViewById(R.id.tv_title);
+        btCancel = findViewById(R.id.bt_cancel);
+        btCancel.setOnClickListener(this);
         adapter = new ListAdapter(getContext());
     }
 

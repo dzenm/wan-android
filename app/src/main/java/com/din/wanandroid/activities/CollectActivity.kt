@@ -2,7 +2,6 @@ package com.din.wanandroid.activities
 
 import android.content.Intent
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.din.helper.dialog.InfoDialog
@@ -13,7 +12,7 @@ import com.din.wanandroid.api.Api
 import com.din.wanandroid.api.CollectHelper
 import com.din.wanandroid.base.BaseActivity
 import com.din.wanandroid.base.BaseAdapter
-import com.din.wanandroid.model.BaseModel
+import com.din.wanandroid.model.BaseStateModel
 import com.din.wanandroid.model.CollectModel
 import kotlinx.android.synthetic.main.activity_collect.*
 import rx.Observer
@@ -30,9 +29,9 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
 
     override fun layoutId(): Int = R.layout.activity_collect
 
-    override fun getToolbar(): Toolbar? = toolbar
+    override fun initialView() {
 
-    override fun initView() {
+        setToolbar(toolbar)
         // set Adapter
         recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         recycler_view.adapter = adapter
@@ -74,10 +73,10 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
             .getCollects(page.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseModel<CollectModel>> {
+            .subscribe(object : Observer<BaseStateModel<CollectModel>> {
                 override fun onError(e: Throwable?) {}
 
-                override fun onNext(t: BaseModel<CollectModel>?) {
+                override fun onNext(t: BaseStateModel<CollectModel>?) {
                     if (t!!.errorCode == 0) {
                         beans = t.data.datas
                         val pageCount = t.data.pageCount

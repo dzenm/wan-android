@@ -29,22 +29,31 @@ public class SpHelper {
 
     /************************************* 方式一：自定义SharedPreferences文件名 *********************************/
 
+    /**
+     * 初始化，建议放在Application
+     * @param context
+     */
     public void init(Context context) {
         mContext = context;
     }
 
-    private SharedPreferences getSharedPreferences(String s) {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(s, Context.MODE_PRIVATE);
+    /**
+     * 获取SharedPreference文件
+     * @param sp SharedPreferenced文件名
+     * @return
+     */
+    private SharedPreferences getSharedPreferences(String sp) {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(sp, Context.MODE_PRIVATE);
         return sharedPreferences;
     }
 
     /**
-     * 存一个数据
-     * @param sp
-     * @param key
-     * @param value
+     * 存数据
+     * @param sp    SharedPreferenced文件名
+     * @param key   存储对象的key
+     * @param value 存储对象的值
      */
-    public void put(String sp, String key, Object value) {
+    public boolean put(String sp, String key, Object value) {
         SharedPreferences.Editor editor = getSharedPreferences(sp).edit();
         if (value instanceof String) {
             editor.putString(key, String.valueOf(value));
@@ -59,14 +68,14 @@ public class SpHelper {
         } else if (value instanceof Set) {
             editor.putStringSet(key, (Set<String>) value);
         }
-        editor.apply();
+        return editor.commit();
     }
 
     /**
      * 取一个数据
-     * @param sp
-     * @param key
-     * @param defValue
+     * @param sp       SharedPreferenced文件名
+     * @param key      获取对象的key
+     * @param defValue 获取数据的默认值（当key不存在时）
      * @return
      */
     public Object get(String sp, String key, Object defValue) {
@@ -130,9 +139,14 @@ public class SpHelper {
 
     /************************************* 方式二：初始化一个文件名 *********************************/
 
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
+    private SharedPreferences mSharedPreferences;   // 全局SharedPreferenced
+    private SharedPreferences.Editor mEditor;       // 全局Editor
 
+    /**
+     * 初始化，建议放在Application
+     * @param context
+     * @param sp      初始化的文件名
+     */
     public void init(Context context, String sp) {
         mContext = context;
         mSharedPreferences = mContext.getSharedPreferences(sp, Context.MODE_PRIVATE);
@@ -141,10 +155,10 @@ public class SpHelper {
 
     /**
      * 存一个数据
-     * @param key
-     * @param value
+     * @param key   存储对象的key
+     * @param value 存储对象的值
      */
-    public void put(String key, Object value) {
+    public boolean put(String key, Object value) {
         if (value instanceof String) {
             mEditor.putString(key, String.valueOf(value));
         } else if (value instanceof Integer) {
@@ -158,8 +172,32 @@ public class SpHelper {
         } else if (value instanceof Set) {
             mEditor.putStringSet(key, (Set<String>) value);
         }
-        mEditor.apply();
+        return mEditor.commit();
     }
+
+    /**
+     * 取一个数据
+     * @param key      获取对象的key
+     * @param defValue 获取数据的默认值（当key不存在时）
+     * @return
+     */
+    public Object get(String key, Object defValue) {
+        if (defValue instanceof String) {
+            return mSharedPreferences.getString(key, String.valueOf(defValue));
+        } else if (defValue instanceof Integer) {
+            return mSharedPreferences.getInt(key, (int) defValue);
+        } else if (defValue instanceof Long) {
+            return mSharedPreferences.getLong(key, (long) defValue);
+        } else if (defValue instanceof Float) {
+            return mSharedPreferences.getFloat(key, (float) defValue);
+        } else if (defValue instanceof Boolean) {
+            return mSharedPreferences.getBoolean(key, (boolean) defValue);
+        } else if (defValue instanceof Set) {
+            return mSharedPreferences.getStringSet(key, (Set<String>) defValue);
+        }
+        return null;
+    }
+
 
     /**
      * 移除某个key对应的值

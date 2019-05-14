@@ -22,9 +22,25 @@ public class TestActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        if (view.getId() == R.id.btn1) {
+        if (view.getId() == R.id.btn0) {
+            new LoginDialog(this)
+                    .setLoginByPassword()
+                    .setOnClickListener(new LoginDialog.OnClickListener() {
+                        @Override
+                        public void onClick(LoginDialog dialog) {
+                            Toast.makeText(TestActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onVerifeClick() {
+                            Toast.makeText(TestActivity.this, "请求验证码", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .build();
+        } else if (view.getId() == R.id.btn1) {
             InfoDialog.newInstance(this)
                     .setContent("是否打开")
+                    .setInfo("标题")
                     .setOnDialogClickListener(new InfoDialog.OnDialogClickListener<InfoDialog>() {
                         @Override
                         public void onClick(InfoDialog dialog, boolean confirm) {
@@ -38,6 +54,7 @@ public class TestActivity extends AppCompatActivity {
                     .build();
         } else if (view.getId() == R.id.btn2) {
             InfoDialog.newInstance(this)
+                    .setInfo("标题")
                     .setContent("是否打开")
                     .setOnDialogClickListener(new InfoDialog.OnDialogClickListener<InfoDialog>() {
                         @Override
@@ -49,11 +66,11 @@ public class TestActivity extends AppCompatActivity {
                             }
                         }
                     })
-                    .setMargin(10)
                     .setGravity(Gravity.BOTTOM)
                     .build();
         } else if (view.getId() == R.id.btn3) {
             InfoDialog.newInstance(this)
+                    .setInfo("标题")
                     .setContent("是否打开")
                     .setOnDialogClickListener(new InfoDialog.OnDialogClickListener<InfoDialog>() {
                         @Override

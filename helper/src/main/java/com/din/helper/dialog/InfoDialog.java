@@ -14,7 +14,7 @@ import com.din.helper.R;
  * @author dinzhenyan
  * @date 2019-04-30 20:03
  * @IDE Android Studio
- *
+ * <p>
  * 提示的Dialog
  */
 public class InfoDialog extends AbsDialog implements View.OnClickListener {
@@ -22,17 +22,18 @@ public class InfoDialog extends AbsDialog implements View.OnClickListener {
     /*
      * 提示框的标题
      */
-    private TextView tv_info;
+    private TextView tvInfo;
 
     /*
      * 提示框的内容
      */
-    protected EditText et_content;
+    protected EditText etContent;
 
     /*
      * 提示框可点击的按钮
      */
-    protected Button bt_positive, bt_negative;
+    protected Button btPositive, btNegative;
+
     private OnDialogClickListener onDialogClickListener;
 
     public static InfoDialog newInstance(@NonNull Context context) {
@@ -49,9 +50,9 @@ public class InfoDialog extends AbsDialog implements View.OnClickListener {
      */
     public InfoDialog setInfo(String info) {
         if (!TextUtils.isEmpty(info)) {
-            tv_info.setText(info);
+            tvInfo.setText(info);
         }
-        tv_info.setVisibility(TextUtils.isEmpty(info) ? View.GONE : View.VISIBLE);
+        tvInfo.setVisibility(TextUtils.isEmpty(info) ? View.GONE : View.VISIBLE);
         return this;
     }
 
@@ -62,8 +63,9 @@ public class InfoDialog extends AbsDialog implements View.OnClickListener {
      */
     public InfoDialog setContent(String content) {
         if (!TextUtils.isEmpty(content)) {
-            et_content.setText(content);
+            etContent.setText(content);
         }
+        etContent.setVisibility(TextUtils.isEmpty(content) ? View.GONE : View.VISIBLE);
         return this;
     }
 
@@ -72,7 +74,7 @@ public class InfoDialog extends AbsDialog implements View.OnClickListener {
      * @return
      */
     public String getContent() {
-        return et_content.getText().toString();
+        return etContent.getText().toString();
     }
 
     /**
@@ -83,10 +85,10 @@ public class InfoDialog extends AbsDialog implements View.OnClickListener {
      */
     public InfoDialog setButtonText(String positiveText, String negativeText) {
         if (!TextUtils.isEmpty(positiveText)) {
-            bt_positive.setText(positiveText);
+            btPositive.setText(positiveText);
         }
         if (!TextUtils.isEmpty(negativeText)) {
-            bt_negative.setText(negativeText);
+            btNegative.setText(negativeText);
         }
         return this;
     }
@@ -114,36 +116,40 @@ public class InfoDialog extends AbsDialog implements View.OnClickListener {
 
     @Override
     protected void initView() {
-        tv_info = findViewById(R.id.tv_info);
-        et_content = findViewById(R.id.et_content);
-        bt_positive = findViewById(R.id.bt_positive);
-        bt_negative = findViewById(R.id.bt_negative);
+        tvInfo = findViewById(R.id.tv_info);
+        etContent = findViewById(R.id.et_content);
+        btPositive = findViewById(R.id.bt_positive);
+        btNegative = findViewById(R.id.bt_negative);
 
-        bt_positive.setOnClickListener(this);
-        bt_negative.setOnClickListener(this);
+        btPositive.setOnClickListener(this);
+        btNegative.setOnClickListener(this);
 
-        setEditBehavior(et_content);
+        setEditBehavior(etContent);
     }
 
     /**
      * 设置EditText行为
-     * @param et_content
+     * @param etContent
      */
-    protected void setEditBehavior(EditText et_content) {
-        et_content.setBackground(null);
-        et_content.setFocusable(false);
-        et_content.setFocusableInTouchMode(false);
-        et_content.setOnTouchListener(null);
-        et_content.setGravity(Gravity.CENTER_HORIZONTAL);
+    protected void setEditBehavior(EditText etContent) {
+        etContent.setBackground(null);
+        etContent.setFocusable(false);
+        etContent.setFocusableInTouchMode(false);
+        etContent.setOnTouchListener(null);
+        etContent.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.bt_positive) {
-            onDialogClickListener.onClick(InfoDialog.this, true);
-        } else if (v.getId() == R.id.bt_negative) {
-            onDialogClickListener.onClick(InfoDialog.this, false);
+        if (onDialogClickListener != null) {
+            if (v.getId() == R.id.bt_positive) {
+                onDialogClickListener.onClick(InfoDialog.this, true);
+            } else if (v.getId() == R.id.bt_negative) {
+                onDialogClickListener.onClick(InfoDialog.this, false);
+            }
+            dismiss();
+        } else {
+            throw new NullPointerException("onDialogClickListener is null");
         }
-        dismiss();
     }
 }

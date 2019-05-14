@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.din.banner.limited.ScrollerPage
 import com.din.wanandroid.R
+import com.din.wanandroid.activities.MainActivity
 import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.ArticleAdapter
 import com.din.wanandroid.api.Api
@@ -18,7 +19,7 @@ import com.din.wanandroid.api.CollectHelper
 import com.din.wanandroid.base.BaseAdapter
 import com.din.wanandroid.model.ArticleModel
 import com.din.wanandroid.model.BannerModel
-import com.din.wanandroid.model.BaseModel
+import com.din.wanandroid.model.BaseStateModel
 import com.din.wanandroid.model.TopModel
 import rx.Observer
 import rx.android.schedulers.AndroidSchedulers
@@ -85,11 +86,11 @@ class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
             .getBanner()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseModel<MutableList<BannerModel>>> {
+            .subscribe(object : Observer<BaseStateModel<MutableList<BannerModel>>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: BaseModel<MutableList<BannerModel>>?) {
+                override fun onNext(t: BaseStateModel<MutableList<BannerModel>>?) {
                     if (t!!.errorCode == 0) {
                         val datas = t.data
                         for (i in datas.indices) {
@@ -114,11 +115,11 @@ class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
             .getTop()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseModel<MutableList<TopModel>>> {
+            .subscribe(object : Observer<BaseStateModel<MutableList<TopModel>>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: BaseModel<MutableList<TopModel>>?) {
+                override fun onNext(t: BaseStateModel<MutableList<TopModel>>?) {
                     if (isFirstStart) {
                         if (t!!.errorCode == 0) {
                             val datas = t.data
@@ -140,17 +141,14 @@ class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
      * 拉取列表数据
      */
     fun fetchListData(lastPostion: Int, isLoadMore: Boolean) {
-        if (!isLoadMore) {
-            promptDialog.showLoadingPoint()
-        }
         Api.getService()
             .getArticle(page.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseModel<ArticleModel>> {
+            .subscribe(object : Observer<BaseStateModel<ArticleModel>> {
                 override fun onError(e: Throwable?) {}
 
-                override fun onNext(t: BaseModel<ArticleModel>?) {
+                override fun onNext(t: BaseStateModel<ArticleModel>?) {
                     if (t!!.errorCode == 0) {
                         val datas = t.data.datas
                         val pageCount = t.data.pageCount
@@ -166,8 +164,8 @@ class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
                             adapter.beans = datas
                             adapter.notifyDataSetChanged()
                             coordinator_layout.visibility = View.VISIBLE
+                            (activity as MainActivity).promptDataBinding.dismiss()
                         }
-                        promptDialog.dismiss()
                     } else {
                         Toast.makeText(activity, t.errorMsg, Toast.LENGTH_SHORT).show()
                     }

@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
+import com.din.helper.R;
 
 /**
  * @author dinzhenyan
@@ -29,11 +30,11 @@ public class EditDialog extends InfoDialog implements TextWatcher {
     }
 
     @Override
-    protected void setEditBehavior(EditText et_content) {
-        et_content.requestFocus();                              // 获取焦点
-        et_content.setHint("请输入内容");                         // 设置提示文字
-        et_content.setSelection(et_content.getText().length()); // 如果有内容将光标移到最后面
-        et_content.addTextChangedListener(this);
+    protected void setEditBehavior(EditText etContent) {
+        etContent.requestFocus();                              // 获取焦点
+        etContent.setHint(R.string.dialog_edit_hint);                         // 设置提示文字
+        etContent.setSelection(etContent.getText().length());  // 如果有内容将光标移到最后面
+        etContent.addTextChangedListener(this);
     }
 
     @Override
@@ -43,11 +44,11 @@ public class EditDialog extends InfoDialog implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (et_content.getText().toString().trim().length() == 0) { // 监听输入框，没有内容时设置提示文字
-            et_content.setHint("请输入内容");
-            bt_positive.setEnabled(false);
+        if (etContent.getText().toString().trim().length() == 0) { // 监听输入框，没有内容时设置提示文字
+            etContent.setHint(R.string.dialog_edit_hint);
+            etContent.setEnabled(false);
         } else {
-            bt_positive.setEnabled(true);
+            etContent.setEnabled(true);
         }
     }
 

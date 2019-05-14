@@ -1,7 +1,10 @@
 package com.din.banner.unlimited;
 
-import android.app.Activity;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -9,63 +12,81 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import com.din.banner.R;
 
-public class ScrollerPage implements ViewPager.OnPageChangeListener {
+public class ScrollerPage extends RelativeLayout implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private ViewPager mViewPager;
-    private LinearLayout mPointLayout;
-
-    private Activity mActivity;
-
-    private int[] mImages;
-    private ImageView[] mPointViews;
-    private ImageView[] mImageViews;
 
     /*
-     *
+     * 未选中圆点的ViewGroup(和图片个数相同)
      */
-    private float mDistance;
+    private LinearLayout mPointUnselected;
 
     /*
-     * 指示器之间的间距
+     * 选中的圆点的ViewGroup(只有一个选中的圆点)
+     */
+    private RelativeLayout mPointSelectedLayout;
+
+    /*
+     * 选中的圆点View
+     */
+    private ImageView mPointSelected;
+
+    /*
+     * 两个圆点左边起始之间的距离
+     */
+    private float mPointDistance;
+
+    /*
+     * 圆点之间的间距
      */
     private int mPointMargin = 10;
 
     /*
-     * 图片之间的间距
-     */
-    private int mImageMargin = 15;
-
-    /*
-     * 指示器的显示的大小
+     * 圆点大小
      */
     private int mPointSize = 40;
 
     /*
-     * 页面的个数
+     * 显示图片的View
      */
-    private int mSize = 0;
+    private ImageView[] mImageViews;
+
+    /*
+     * 图片资源
+     */
+    private int[] mImages;
+
+    /*
+     * 图片之间的间距
+     */
+    private int[] mImageMargins;
 
     /*
      * 当前页面的位置
      */
-    private int mCurrentPosition = 500;
+    private int mCurrentPosition;
 
-    public static ScrollerPage newInstance() {
-        ScrollerPage scrollerPage = new ScrollerPage();
-        return scrollerPage;
+    /*
+     * 是否可以循环
+     */
+    private boolean isRepeat = true;
+
+    /*
+     * 默认图片的边距
+     */
+    private int mDefaultImageMargin = 10;
+
+    public ScrollerPage(Context context) {
+        this(context, null);
     }
 
-    /**
-     * @param activity
-     * @param viewPager
-     * @param layout
-     * @return
-     */
-    public ScrollerPage init(Activity activity, ViewPager viewPager, LinearLayout layout) {
-        mActivity = activity;
-        mViewPager = viewPager;
-        mPointLayout = layout;
-        return this;
+    public ScrollerPage(Context context, AttributeSet attrs) {
+        this(context, attrs, -1);
+    }
+
+    public ScrollerPage(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialView();
     }
 
     /**
@@ -75,48 +96,88 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener {
      */
     public ScrollerPage setImages(@NonNull int[] images) {
         mImages = images;
-        mSize = mImages.length;
         return this;
     }
 
     /**
-     * 显示
+     * 设置图片的边距
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     * @return
      */
-    public void show() {
-        initView();
-        initViewPager();         // 设置图片的显示
+    public ScrollerPage setImageMargins(int left, int top, int right, int bottom) {
+        mImageMargins[0] = left;
+        mImageMargins[1] = top;
+        mImageMargins[2] = right;
+        mImageMargins[3] = bottom;
+        return this;
     }
 
     /**
      * 跳转到下一页
      */
     public void nextPage() {
-        mCurrentPosition++;
+        mViewPager.setCurrentItem(mCurrentPosition++);
+    }
+
+    /**
+     * 绘制
+     */
+    public void show() {
+        int length = mImages.length;
+        mCurrentPosition = length << 10 + 1;
+        i️nitialImageView(length);
+        initialPointView(length);
+        initialViewPager();
     }
 
     /**
      * 初始化View
      */
-    private void initView() {
-        mImageViews = new ImageView[mSize];
-        mPointViews = new ImageView[mSize];              // 小圆点的个数
+    private void initialView() {
+        View view = inflate(getContext(), R.layout.layout_banner_unlimited, this);
+        mPointUnselected = view.findViewById(R.id.ll_point_unselected);
+        mPointSelectedLayout = view.findViewById(R.id.rl_point_selected);
+        mViewPager = view.findViewById(R.id.viewPager);
 
-        RelativeLayout.LayoutParams paramsRL = (RelativeLayout.LayoutParams) mViewPager.getLayoutParams();
-        LinearLayout.LayoutParams paramsLL = getPointLayoutParams();
+        mImageMargins = new int[4];
+        setImageMargins(mDefaultImageMargin, mDefaultImageMargin, mDefaultImageMargin, mDefaultImageMargin);
+    }
 
-        for (int i = 0; i < mSize; i++) {
-            ImageView imageView = getImageView(paramsRL, mImages[i]);
-            imageView.setScaleType(ImageView.ScaleType.FIT_START);     // 设置图片的适配
-            imageView.setPadding(mImageMargin, mImageMargin, mImageMargin, mImageMargin);
+    /**
+     * 初始化图片View
+     * @param length
+     */
+    private void i️nitialImageView(int length) {
+        // 设置image的边距
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mViewPager.getLayoutParams();
+        mImageViews = new ImageView[length];
+        for (int i = 0; i < length; i++) {       // 动态加载图片
+            ImageView imageView = getImageView(layoutParams, mImages[i]);
+            // 设置图片的适配
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setPadding(mImageMargins[0], mImageMargins[1], mImageMargins[2], mImageMargins[3]);
             mImageViews[i] = imageView;
-
-            boolean isFirst = i == 0;
-            ImageView pointView = getImageView(paramsLL, getPointImageResource(isFirst));
-            pointView.setSelected(isFirst ? true : false);
-            mPointViews[i] = pointView;
-            mPointLayout.addView(pointView);
         }
+    }
 
+    /**
+     * 初始化圆点View
+     * @param length
+     */
+    private void initialPointView(int length) {
+        // 设置point的边距
+        LinearLayout.LayoutParams layoutParams = getPointLayoutParams();
+        for (int i = 0; i < length; i++) {
+            // 动态加载未选中的圆点
+            ImageView imageView = getImageView(layoutParams, R.drawable.unselect);
+            mPointUnselected.addView(imageView);
+        }
+        // 添加选中的圆点
+        mPointSelected = getImageView(layoutParams, R.drawable.select);
+        mPointSelectedLayout.addView(mPointSelected);
     }
 
     /**
@@ -136,47 +197,95 @@ public class ScrollerPage implements ViewPager.OnPageChangeListener {
      * @return
      */
     private ImageView getImageView(ViewGroup.LayoutParams layoutParams, int resId) {
-        ImageView imageView = new ImageView(mActivity);
+        ImageView imageView = new ImageView(getContext());
         imageView.setLayoutParams(layoutParams);
         imageView.setImageResource(resId);
         return imageView;
     }
 
     /**
-     * 获取小圆点的图像资源
-     * @param isSelect
-     * @return
-     */
-    private int getPointImageResource(boolean isSelect) {
-        return isSelect ? R.drawable.select : R.drawable.unselect;
-    }
-
-    /**
      * 初始化ViewPager设置
      */
-    private void initViewPager() {
-        UnlimitedViewPagerAdapter adapter = new UnlimitedViewPagerAdapter(mImageViews);
+    private void initialViewPager() {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(mImageViews, isRepeat);
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(mCurrentPosition);
+        mPointSelected.getViewTreeObserver().addOnGlobalLayoutListener(this);                   // 任何一个组件都可以得到视图树
     }
 
+    /**
+     * 获取根View的LayoutParams
+     * @return
+     */
+    public RelativeLayout.LayoutParams getDecorView() {
+        RelativeLayout.LayoutParams layoutParams = (LayoutParams) mViewPager.getLayoutParams();
+        return getDecorView();
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        if (positionOffset == 0) return;
+        // 导航页滑动的时候调用, positionOffset: 滑动的百分比（[0,1}）
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mPointSelected.getLayoutParams();
+//        layoutParams.leftMargin = (int) (mPointDistance * (positionOffset + position % mImages.length)) + mPointMargin;
+        int length = mImages.length;
+        float offsetDistance = onPointBehavior(position, positionOffset, positionOffsetPixels, length);
+        layoutParams.leftMargin = (int) (mPointDistance * offsetDistance + position % length) + mPointMargin;
+        mPointSelected.setLayoutParams(layoutParams);
     }
 
-    public void onPageSelected(int position) {
-        /**
-         * 循环播放的原理：ViewPager滑动的页面设置无限大，然后根据需要循环播放的页面的个数
-         * 用position除以个数取余。实现页面显示的循环，但position是从0开始无限增长
-         */
-        for (int i = 0; i < mSize; i++) {       // 滑动之后，显示当前停留的point的位置
-            mPointViews[i].setSelected(position % mSize == i ? true : false);    // 设置是否选中
-            mPointViews[i].setImageResource(getPointImageResource(position % mSize == i)); // 设置当前显示的图标，区别没选中的
+    // 记录上一次滑动的positionOffsetPixels值
+    private int lastOffset = -1;
+    private boolean isLeft = false;
+
+    protected float onPointBehavior(int position, float positionOffset, int positionOffsetPixels, int length) {
+        float offsetDistance = 0;
+        scrollerDirection(positionOffsetPixels);
+        if (position % length == 0 && isLeft) {
+            if (positionOffset > 0.5) {
+                offsetDistance = positionOffset - 1;
+            } else {
+                offsetDistance = (length - 1) + positionOffset;
+            }
+        } else if (position % length == length - 1 && !isLeft) {
+            if (positionOffset < 0.5) {
+                offsetDistance = positionOffset - 1;
+            }
+        } else {
+            offsetDistance = positionOffset;
         }
+
+        return offsetDistance;
+    }
+
+    /**
+     * 判断滑动的方向
+     * @param positionOffsetPixels
+     */
+    private void scrollerDirection(int positionOffsetPixels) {
+        if (lastOffset != -1) return;
+        if (positionOffsetPixels > lastOffset) {
+            isLeft = false;
+        } else if (positionOffsetPixels <= lastOffset) {
+            isLeft = true;
+        }
+        lastOffset = positionOffsetPixels;
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        lastOffset = -1;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        mPointDistance = mPointUnselected.getChildAt(1).getLeft() - mPointUnselected.getChildAt(0).getLeft();
+        // 移除视图树的监听
+        mPointSelected.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 }

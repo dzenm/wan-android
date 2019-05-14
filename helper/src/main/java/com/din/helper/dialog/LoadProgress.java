@@ -183,7 +183,7 @@ public class LoadProgress extends View {
 
 
         // 绘制进度条的底色
-        setPaint(mPaintLineBackground, getResources().getColor(R.color.colorGray));
+        setPaint(mPaintLineBackground, getResources().getColor(R.color.colorHintText));
         canvas.drawLine(0, lineOffsetTop, darkLineWidth, lineOffsetTop, mPaintLineBackground);
 
         // 绘制进度条已进行的颜色

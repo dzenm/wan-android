@@ -1,27 +1,28 @@
 package com.din.wanandroid.activities
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.din.wanandroid.R
 import com.din.wanandroid.adapter.ViewPagerAdapter
+import com.din.wanandroid.base.BaseActivity
 import com.din.wanandroid.fragment.HallFragment
 import com.din.wanandroid.fragment.HomeFragment
 import com.din.wanandroid.fragment.PersonalFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
+class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     private lateinit var fragments: MutableList<Fragment>
     private lateinit var homeFragment: HomeFragment
     private lateinit var hallFragment: HallFragment
     private lateinit var personalFragment: PersonalFragment
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun layoutId(): Int = R.layout.activity_main
 
+    override fun isUseDataBinding(): Boolean = false
+
+    override fun initialView() {
+        promptDataBinding.showLoadingPoint()
         fragments = mutableListOf()
 
         homeFragment = HomeFragment()
@@ -45,6 +46,10 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             }
             return@setOnNavigationItemSelectedListener false
         }
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack()
     }
 
     override fun onPageScrollStateChanged(state: Int) {

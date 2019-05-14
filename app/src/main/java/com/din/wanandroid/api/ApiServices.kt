@@ -40,37 +40,37 @@ interface ApiServices {
      * 获取Banner图列表
      */
     @GET("banner/json")
-    fun getBanner(): Observable<BaseModel<MutableList<BannerModel>>>
+    fun getBanner(): Observable<BaseStateModel<MutableList<BannerModel>>>
 
     /**
      * 获取所有文章
      */
     @GET("article/list/{id}/json")
-    fun getArticle(@Path("id") id: String): Observable<BaseModel<ArticleModel>>
+    fun getArticle(@Path("id") id: String): Observable<BaseStateModel<ArticleModel>>
 
     /**
      * 获取置顶文章
      */
     @GET("article/top/json")
-    fun getTop(): Observable<BaseModel<MutableList<TopModel>>>
+    fun getTop(): Observable<BaseStateModel<MutableList<TopModel>>>
 
     /**
      * 获取所有项目类型
      */
     @GET("/project/tree/json")
-    fun getProjectType(): Observable<BaseModel<MutableList<ProjectTypeModel>>>
+    fun getProjectType(): Observable<BaseStateModel<MutableList<ProjectTypeModel>>>
 
     /**
      * 获取所有项目
      */
     @GET("project/list/{id}/json")
-    fun getProject(@Path("id") id: String, @Query("cid") cid: String): Observable<BaseModel<ArticleModel>>
+    fun getProject(@Path("id") id: String, @Query("cid") cid: String): Observable<BaseStateModel<ArticleModel>>
 
     /**
      * 获取最新项目
      */
     @GET("/article/listproject/{id}/json")
-    fun getNewProject(@Path("id") id: String): Observable<BaseModel<NewProjectModel>>
+    fun getNewProject(@Path("id") id: String): Observable<BaseStateModel<NewProjectModel>>
 
     /**
      * 获取所有体系类型
@@ -100,8 +100,8 @@ interface ApiServices {
      * 获取所有收藏文章
      */
     @GET("lg/collect/list/{id}/json")
-    fun getCollects(@Path("id") id: String): Observable<BaseModel<CollectModel>>
+    fun getCollects(@Path("id") id: String): Observable<BaseStateModel<CollectModel>>
 
     @GET("navi/json")
-    fun getNavi(): Observable<BaseModel<MutableList<NaviModel>>>
+    fun getNavi(): Observable<BaseStateModel<MutableList<NaviModel>>>
 }

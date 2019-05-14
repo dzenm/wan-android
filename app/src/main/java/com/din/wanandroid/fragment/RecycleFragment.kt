@@ -1,19 +1,17 @@
 package com.din.wanandroid.fragment
 
-import android.app.Activity
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.base.BaseFragment
 import com.din.wanandroid.util.RecyclerViewHelper
 
 open abstract class RecycleFragment : BaseFragment(), RecyclerViewHelper.OnScrollLastItemListener {
 
-    protected lateinit var promptDialog: PromptDialog     // 加载提示框
     protected var page: Int = 0                           // 加载的页数
+
 
     /**
      * 滑动刷新
@@ -33,8 +31,6 @@ open abstract class RecycleFragment : BaseFragment(), RecyclerViewHelper.OnScrol
     override fun initiatedView() {
         val recycler_view = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         val swipe_refresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
-
-        promptDialog = PromptDialog.newInstance(activity as Activity)
 
         onAfterCreateView(rootView)
         // set Adapter

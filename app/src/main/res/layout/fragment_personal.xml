@@ -206,7 +206,7 @@
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/d"
+                    android:src="@drawable/a"
                     app:isCircle="true" />
 
             <com.din.banner.view.ImageView

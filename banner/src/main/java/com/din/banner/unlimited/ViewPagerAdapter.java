@@ -6,12 +6,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
-public class UnlimitedViewPagerAdapter extends PagerAdapter {
+public class ViewPagerAdapter extends PagerAdapter {
 
     private ImageView[] mImageViews;
+    private boolean isRepeat;
 
-    public UnlimitedViewPagerAdapter(ImageView[] imageViews) {
+    public ViewPagerAdapter(ImageView[] imageViews, boolean isRepeat) {
         mImageViews = imageViews;
+        this.isRepeat = isRepeat;
     }
 
     /**
@@ -20,7 +22,7 @@ public class UnlimitedViewPagerAdapter extends PagerAdapter {
      */
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return isRepeat ? Integer.MAX_VALUE : mImageViews.length;
     }
 
     /**

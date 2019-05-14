@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.din.helper.R;
+import com.din.helper.draw.DrawableHelper;
 
 /**
  * @author dinzhenyan
@@ -24,10 +25,10 @@ public class UpGradeDialog extends AbsDialog implements View.OnClickListener, Lo
      */
     private int headerImage;
 
-    private TextView tv_version;
-    private TextView tv_size;
-    private TextView tv_desc;
-    private ImageView iv_header;
+    private TextView tvVersion;
+    private TextView tvSize;
+    private TextView tvDesc;
+    private ImageView ivHead;
 
     /*
      * 下载的进度条
@@ -52,7 +53,7 @@ public class UpGradeDialog extends AbsDialog implements View.OnClickListener, Lo
      * @return
      */
     public UpGradeDialog setVersion(String version) {
-        tv_version.setText(version);
+        tvVersion.setText(version);
         return this;
     }
 
@@ -62,7 +63,7 @@ public class UpGradeDialog extends AbsDialog implements View.OnClickListener, Lo
      * @return
      */
     public UpGradeDialog setSize(String size) {
-        tv_size.setText(size);
+        tvSize.setText(size);
         return this;
     }
 
@@ -72,7 +73,7 @@ public class UpGradeDialog extends AbsDialog implements View.OnClickListener, Lo
      * @return
      */
     public UpGradeDialog setDesc(String desc) {
-        tv_desc.setText(desc);
+        tvDesc.setText(desc);
         return this;
     }
 
@@ -90,7 +91,7 @@ public class UpGradeDialog extends AbsDialog implements View.OnClickListener, Lo
 
     protected UpGradeDialog(@NonNull Context context) {
         super(context);
-        mBackground = Color.TRANSPARENT;
+        mBackground = DrawableHelper.getDrawable(Color.TRANSPARENT, 0);
         mAnimator = AnimatorHelper.overshoot();
     }
 
@@ -101,10 +102,10 @@ public class UpGradeDialog extends AbsDialog implements View.OnClickListener, Lo
 
     @Override
     protected void initView() {
-        iv_header = findViewById(R.id.iv_header);
-        tv_version = findViewById(R.id.tv_version);
-        tv_size = findViewById(R.id.tv_size);
-        tv_desc = findViewById(R.id.tv_desc);
+        ivHead = findViewById(R.id.iv_header);
+        tvVersion = findViewById(R.id.tv_version);
+        tvSize = findViewById(R.id.tv_size);
+        tvDesc = findViewById(R.id.tv_desc);
         mLoadProgress = findViewById(R.id.load_progress);
 
         Button bt_upgrade = findViewById(R.id.bt_upgrade);

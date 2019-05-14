@@ -4,11 +4,12 @@ import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.din.wanandroid.R
+import com.din.wanandroid.activities.MainActivity
 import com.din.wanandroid.activities.TablesActivity
 import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.MultipleAdapter
 import com.din.wanandroid.api.Api
-import com.din.wanandroid.model.BaseModel
+import com.din.wanandroid.model.BaseStateModel
 import com.din.wanandroid.model.MultipleTitleBean
 import com.din.wanandroid.model.NewProjectModel
 import rx.Observer
@@ -39,21 +40,20 @@ class TreeFragment : RecycleFragment(), MultipleAdapter.OnItemClickListener {
     override fun setAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder> = adapter
 
     fun fetchData() {
-        promptDialog.showLoadingPoint()
         Api.getService()
             .getNewProject(page.toString())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseModel<NewProjectModel>> {
+            .subscribe(object : Observer<BaseStateModel<NewProjectModel>> {
                 override fun onError(e: Throwable?) {
                 }
 
-                override fun onNext(t: BaseModel<NewProjectModel>?) {
+                override fun onNext(t: BaseStateModel<NewProjectModel>?) {
                     val datas = t!!.data.datas
                     beans.add(MultipleTitleBean("项目"))
                     beans.addAll(datas)
                     adapter.addData(beans)
-                    promptDialog.dismiss()
+                    (activity as MainActivity).promptDataBinding.dismiss()
                 }
 
                 override fun onCompleted() {

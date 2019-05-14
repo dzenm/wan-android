@@ -18,7 +18,7 @@
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CollectActivity" />
         <activity android:name=".activities.WebActivity" />
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".activities.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -35,9 +35,9 @@ public class PromptDialog extends AbsDialog {
      */
     private boolean isCancel;
 
-    private ImageView iv_icon;
+    private ImageView ivIconImage;
 
-    private TextView tv_load;
+    private TextView tvLoadText;
 
     /*
      * 是否短暂的显示
@@ -120,7 +120,7 @@ public class PromptDialog extends AbsDialog {
      * @return
      */
     public PromptDialog setMessage(String message) {
-        tv_load.setText(message);
+        tvLoadText.setText(message);
         return this;
     }
 
@@ -135,7 +135,7 @@ public class PromptDialog extends AbsDialog {
     }
 
     public PromptDialog setDialog(String t, int ic, boolean brief, boolean cancel) {
-        tv_load.setText(t);
+        tvLoadText.setText(t);
         setImageResourceType(ic);
         isShowBrief = brief;
         isCancel = cancel;
@@ -147,7 +147,7 @@ public class PromptDialog extends AbsDialog {
 
     protected PromptDialog(@NonNull Context context) {
         super(context);
-        mBackground = R.drawable.bg_radius_blackff;
+        mBackground = getRadiusGrayTranslucent();
         mAnimator = AnimatorHelper.alpha();
         isCancel = true;
     }
@@ -186,8 +186,8 @@ public class PromptDialog extends AbsDialog {
 
     @Override
     protected void initView() {
-        iv_icon = findViewById(R.id.iv_icon);
-        tv_load = findViewById(R.id.tv_load);
+        ivIconImage = findViewById(R.id.iv_icon);
+        tvLoadText = findViewById(R.id.tv_load);
     }
 
     /**
@@ -195,18 +195,23 @@ public class PromptDialog extends AbsDialog {
      * @param icon
      */
     protected void setImageResourceType(int icon) {
-        ViewGroup.LayoutParams layoutParams = iv_icon.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = ivIconImage.getLayoutParams();
         layoutParams.width = dp2px(DEFAULT_SIZE);
         layoutParams.height = dp2px(DEFAULT_SIZE);
-        iv_icon.setLayoutParams(layoutParams);
-        iv_icon.setImageResource(icon);
-        ((Animatable) iv_icon.getDrawable()).start();
+        ivIconImage.setLayoutParams(layoutParams);
+        ivIconImage.setImageResource(icon);
+        ((Animatable) ivIconImage.getDrawable()).start();
     }
 
     @Override
     protected AbsDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
-        lp.bottomMargin = dp2px(mMargin);
+        lp.bottomMargin = dp2px(8 * mMargin);
         lp.topMargin = dp2px(8 * mMargin);
         return this;
+    }
+
+    @Override
+    protected boolean isPromptDialog() {
+        return true;
     }
 }

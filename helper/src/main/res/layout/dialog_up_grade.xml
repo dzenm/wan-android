@@ -17,47 +17,47 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/padding_normal">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="@dimen/margin_small">
 
             <TextView
                     android:id="@+id/tv_version"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/margin_empty"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="2.4.1" />
+                    android:text="@string/dialog_upgrade_version" />
 
             <TextView
                     android:id="@+id/tv_size"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/margin_empty"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="20M" />
+                    android:text="@string/dialog_upgrade_size" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="200dp"
-                android:minHeight="50dp">
+                android:maxHeight="@dimen/oversized_text_size"
+                android:minHeight="@dimen/oversized_small_text_size">
 
             <TextView
                     android:id="@+id/tv_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="适配Android P" />
+                    android:text="@string/dialog_upgrade_desc" />
         </androidx.core.widget.NestedScrollView>
 
         <Button
                 android:id="@+id/bt_upgrade"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/button_small_size"
+                android:layout_marginTop="@dimen/margin_small"
                 android:background="@android:color/holo_red_light"
                 android:text="@string/dialog_up_grade"
                 android:textColor="@android:color/white" />

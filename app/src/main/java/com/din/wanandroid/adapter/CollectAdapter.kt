@@ -33,9 +33,6 @@ class CollectAdapter : BaseAdapter<CollectModel.Datas>() {
         if (viewType == ITEM_TYPE_CONTENT) {
             val contentView = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_collect, parent, false)
             return ContentViewHolder(contentView)
-        } else if (viewType == ITEM_TYPE_FOOTER) {
-            val footerView = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_foot, parent, false)
-            return FooterViewHolder(footerView)
         }
         return super.createViewHolder(parent, viewType)
     }

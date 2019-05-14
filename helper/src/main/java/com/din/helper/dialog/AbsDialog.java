@@ -3,6 +3,7 @@ package com.din.helper.dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AppCompatDialog;
 import com.din.helper.R;
+import com.din.helper.draw.DrawableHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,7 +36,7 @@ public abstract class AbsDialog extends AppCompatDialog {
      * dialog背景，可通过setBackground()方法设置background
      * 默认的background在构造方法里，为白色圆角背景
      */
-    protected int mBackground;
+    protected GradientDrawable mBackground;
 
     /*
      * dialog边距值， 可通过setMargin()方法设置margin
@@ -85,13 +87,22 @@ public abstract class AbsDialog extends AppCompatDialog {
      */
     private boolean isCenter = true;
 
+    /*
+     * 默认的dialog边距
+     */
+    private int mDefaultMargin = 10;
+
+    /*
+     * 默认全圆角显示
+     */
+    private boolean isDefaultRadius = true;
+
     static {
         // 开启在TextView的drawableTop或者其他额外方式使用矢量图渲染
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     /************************************* 以下为自定义提示内容 *********************************/
-
     /**
      * Dialog的margin值
      * @param margin
@@ -131,7 +142,7 @@ public abstract class AbsDialog extends AppCompatDialog {
      * @param background
      * @return
      */
-    public AbsDialog setBackground(int background) {
+    public AbsDialog setBackground(GradientDrawable background) {
         mBackground = background;
         isDefaultBackground = false;
         return this;
@@ -142,7 +153,7 @@ public abstract class AbsDialog extends AppCompatDialog {
      * @return
      */
     public AbsDialog setBackgroundRectangle() {
-        setBackground(Color.WHITE);
+        setBackground(DrawableHelper.getDrawable(Color.WHITE, 0));
         return this;
     }
 
@@ -157,6 +168,16 @@ public abstract class AbsDialog extends AppCompatDialog {
     }
 
     /**
+     * 点击dialog之外是否可以取消
+     * @param cancel
+     * @return
+     */
+    public AbsDialog setTouchOutsideCancel(boolean cancel) {
+        setCanceledOnTouchOutside(cancel);
+        return this;
+    }
+
+    /**
      * 创建并显示Dialog，放在最后调用
      * 继承时若需要设置gravity，animator， background时
      * 必须重写该方法，并且在 super.apply() 之前调用
@@ -164,21 +185,27 @@ public abstract class AbsDialog extends AppCompatDialog {
      * @return
      */
     public AbsDialog build() {
-        setDialogSize();
+        Window window = getWindow();
+        setDialogSize(window);
         setStyle();
-        setWindowProperty();
+        setWindowProperty(window);
         show();
-        afterShowSetting();
+        afterShowSetting(window);
         return this;
     }
 
     /************************************* 以下为实现细节（不可见方法） *********************************/
 
     public AbsDialog(@NonNull Context context) {
-        super(context, R.style.BaseDialog);
+        this(context, R.style.BaseDialog);
+    }
+
+    public AbsDialog(Context context, int theme) {
+        super(context, theme);
         mGravity = Gravity.CENTER;
         mAnimator = AnimatorHelper.shrink();
-        mBackground = R.drawable.bg_radius_white;
+        mBackground = getRadius();
+        mMargin = mDefaultMargin;
         setCanceledOnTouchOutside(false);
         create();
     }
@@ -198,14 +225,16 @@ public abstract class AbsDialog extends AppCompatDialog {
      * 设置默认的效果
      */
     protected AbsDialog setStyle() {
-        if (isDefaultMargin) {
-            if (mGravity == Gravity.TOP) {
-                if (isDefaultBackground) {
-                    mBackground = R.drawable.bg_radius_bottom_white;
-                }
-            } else if (mGravity == Gravity.BOTTOM) {
-                if (isDefaultBackground) {
-                    mBackground = R.drawable.bg_radius_top_while;
+        if (!isDefaultRadius) {
+            if (isDefaultMargin) {
+                if (mGravity == Gravity.TOP) {
+                    if (isDefaultBackground) {
+                        mBackground = getBottomRadius();
+                    }
+                } else if (mGravity == Gravity.BOTTOM) {
+                    if (isDefaultBackground) {
+                        mBackground = getTopRadius();
+                    }
                 }
             }
         }
@@ -241,10 +270,17 @@ public abstract class AbsDialog extends AppCompatDialog {
      * 初始化dialog的大小
      * @return
      */
-    private AbsDialog setDialogSize() {
-        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mView.getLayoutParams();
-        setDialogLayoutParams(lp);
-        mView.setLayoutParams(lp);
+    private AbsDialog setDialogSize(Window window) {
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mView.getLayoutParams();
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        if (isCenter) {
+            setCenterDialogLayoutParams(windowAttributes);
+        } else {
+            setDialogLayoutParams(layoutParams);
+            mView.setLayoutParams(layoutParams);
+        }
+        window.setAttributes(windowAttributes);
         return this;
     }
 
@@ -252,24 +288,36 @@ public abstract class AbsDialog extends AppCompatDialog {
      * 设置dialog的LayoutParams
      * @return
      */
-    protected AbsDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams lp) {
-        if (!isCenter) {
-            lp.width = getDisplayWidth() - dp2px(2 * mMargin);
-            lp.bottomMargin = dp2px(mMargin);
-            lp.topMargin = dp2px(8 * mMargin);
+    protected AbsDialog setDialogLayoutParams(ViewGroup.MarginLayoutParams layoutParams) {
+        layoutParams.topMargin = dp2px(mMargin);
+        layoutParams.bottomMargin = dp2px(mMargin);
+        layoutParams.width = getDisplayWidth() - 2 * dp2px(mMargin);
+        return this;
+    }
+
+    /**
+     * 设置dialog居中的LayoutParams
+     * @return
+     */
+    protected AbsDialog setCenterDialogLayoutParams(WindowManager.LayoutParams windowAttributes) {
+        if (!isPromptDialog()) {
+            windowAttributes.width = getDisplayWidth() - 10 * dp2px(mMargin);
         }
         return this;
+    }
+
+    protected boolean isPromptDialog() {
+        return false;
     }
 
     /**
      * 设置Windows的属性
      * @return
      */
-    protected AbsDialog setWindowProperty() {
-        Window window = getWindow();
+    protected AbsDialog setWindowProperty(Window window) {
         window.setGravity(mGravity);                                  // 显示的位置
         window.setWindowAnimations(mAnimator);                        // 窗口动画
-        mView.setBackgroundResource(mBackground);
+        mView.setBackground(mBackground);
         return this;
     }
 
@@ -277,8 +325,7 @@ public abstract class AbsDialog extends AppCompatDialog {
      * Dialog调用show方法之后的一些设置
      * @return
      */
-    protected AbsDialog afterShowSetting() {
-        Window window = getWindow();
+    protected AbsDialog afterShowSetting(Window window) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);  // 解决ALertDialog无法弹出软键盘,且必须放在AlertDialog的show方法之后
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);  // 收起键盘
@@ -311,11 +358,65 @@ public abstract class AbsDialog extends AppCompatDialog {
     }
 
     /**
+     * 获取字符串
+     * @param id
+     * @return
+     */
+    protected String getString(int id) {
+        return getContext().getResources().getString(id);
+    }
+
+    /**
+     * 获取颜色值
+     * @param id
+     * @return
+     */
+    protected int getColor(int id) {
+        return getContext().getResources().getColor(id);
+    }
+
+    /**
      * 获取屏幕高度
      * @return
      */
     protected int getDisplayHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    /**
+     * 圆角，白色背景
+     * @return
+     */
+    public GradientDrawable getRadius() {
+        return DrawableHelper.getDrawable(8);
+    }
+
+    /**
+     * 顶部圆角，白色背景
+     * @return
+     */
+    public GradientDrawable getTopRadius() {
+        return DrawableHelper.getDrawable(new float[]{8, 8, 0, 0});
+    }
+
+    /**
+     * 底部圆角，白色背景
+     * @return
+     */
+    public GradientDrawable getBottomRadius() {
+        return DrawableHelper.getDrawable(new float[]{0, 0, 8, 8});
+    }
+
+    /**
+     * 圆角，背景透明灰
+     * @return
+     */
+    public GradientDrawable getRadiusGrayTranslucent() {
+        return DrawableHelper.getDrawable(getColor(R.color.colorPrimaryTranculent), 8);
+    }
+
+    public GradientDrawable getEditStroke() {
+        return DrawableHelper.getDrawable(Color.TRANSPARENT, 2, 1, getColor(R.color.colorDivide));
     }
 
     public interface OnDialogClickListener<T extends AbsDialog> {

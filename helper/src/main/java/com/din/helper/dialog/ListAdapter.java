@@ -58,24 +58,24 @@ public class ListAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.info_lv_item, null);
-            viewHolder.tv_text = convertView.findViewById(R.id.tv_text);
+            convertView = inflater.inflate(R.layout.lv_item, null);
+            viewHolder.tvText = convertView.findViewById(R.id.tv_text);
             if (isIcon) {
-                viewHolder.iv_icon = convertView.findViewById(R.id.iv_icon);
+                viewHolder.ivIcon = convertView.findViewById(R.id.iv_icon);
             }
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tv_text.setText(texts[position]);
+        viewHolder.tvText.setText(texts[position]);
         if (isIcon) {
-            viewHolder.iv_icon.setImageResource(icons[position]);
+            viewHolder.ivIcon.setImageResource(icons[position]);
         }
         return convertView;
     }
 
     public class ViewHolder {
-        private TextView tv_text;
-        private ImageView iv_icon;
+        private TextView tvText;
+        private ImageView ivIcon;
     }
 }

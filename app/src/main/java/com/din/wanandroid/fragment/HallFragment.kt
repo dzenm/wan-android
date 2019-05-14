@@ -3,6 +3,7 @@ package com.din.wanandroid.fragment
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.din.wanandroid.R
+import com.din.wanandroid.activities.MainActivity
 import com.din.wanandroid.adapter.TabAdapter
 import com.din.wanandroid.base.BaseFragment
 import com.google.android.material.tabs.TabLayout
@@ -16,6 +17,7 @@ class HallFragment : BaseFragment() {
     override fun layoutId(): Int = R.layout.fragment_hall
 
     override fun lazyPrepareFetchData() {
+        (activity as MainActivity).promptDataBinding.showLoadingPoint()
         // Tab Title
         val titles: Array<String> = arrayOf(
             getString(R.string.tab_item_tree),

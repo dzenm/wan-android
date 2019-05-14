@@ -11,7 +11,7 @@ import com.din.wanandroid.api.Api
 import com.din.wanandroid.api.CollectHelper
 import com.din.wanandroid.base.BaseAdapter
 import com.din.wanandroid.model.ArticleModel
-import com.din.wanandroid.model.BaseModel
+import com.din.wanandroid.model.BaseStateModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import rx.Observer
 import rx.android.schedulers.AndroidSchedulers
@@ -65,10 +65,10 @@ class ProjectTabItemFragment(var typeId: String) : RecycleFragment(),
             .getProject(page.toString(), typeId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseModel<ArticleModel>> {
+            .subscribe(object : Observer<BaseStateModel<ArticleModel>> {
                 override fun onError(e: Throwable?) {}
 
-                override fun onNext(t: BaseModel<ArticleModel>?) {
+                override fun onNext(t: BaseStateModel<ArticleModel>?) {
                     if (t!!.errorCode == 0) {
                         val datas = t.data.datas
                         val pageCount = t.data.pageCount

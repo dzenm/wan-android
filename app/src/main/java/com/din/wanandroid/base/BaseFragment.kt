@@ -1,5 +1,6 @@
 package com.din.wanandroid.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,8 +57,16 @@ open abstract class BaseFragment : Fragment() {
     /**
      * 页面已经创建，从一个可见的Fragment切换到不可见的Fragment（不可见的Fragment为本Fragment）
      */
-    protected open fun onRestart() {
+    protected fun onRestart() {
 
+    }
+
+    /**
+     * 跳转页面
+     */
+    protected fun navigation(clazz: Class<Any>) {
+        val intent = Intent(activity, clazz)
+        activity?.startActivity(intent)
     }
 
     override fun onDestroyView() {
