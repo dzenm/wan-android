@@ -19,6 +19,11 @@ import kotlinx.android.synthetic.main.activity_web.*
 
 class WebActivity : AppCompatActivity() {
 
+    companion object {
+        val URL = "web_url"
+        val TITLE = "web_title"
+    }
+
     private lateinit var web_view: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +39,9 @@ class WebActivity : AppCompatActivity() {
         web_view?.setLayoutParams(params)
         root_view.addView(web_view)
 
-        val titleStr = intent.getStringExtra("title")
+        val titleStr = intent.getStringExtra(TITLE)
         supportActionBar?.setTitle(titleStr)
-        val url = intent.getStringExtra("url")
+        val url = intent.getStringExtra(URL)
         url?.let { web_view.loadUrl(it) }
 
         // 此方法可以在webview中打开链接而不会跳转到外部浏览器

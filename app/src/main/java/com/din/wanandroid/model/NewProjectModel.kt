@@ -3,7 +3,6 @@ package com.din.wanandroid.model
 /**
  * @author dinzhenyan
  * @date   2019-04-26 10:39
- * @IDE    Android Studio
  */
 data class NewProjectModel(
     var curPage: Int,

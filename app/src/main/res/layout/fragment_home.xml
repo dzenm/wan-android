@@ -5,7 +5,6 @@
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         tools:context=".fragment.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,9 +24,17 @@
                     android:background="@color/colorPrimaryDark" />
 
             <RelativeLayout
-                    app:layout_collapseMode="parallax"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    app:layout_collapseMode="parallax">
+
+                <ImageView
+                        android:id="@+id/iv_empty_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/activity_margin_16dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_empty_pic" />
 
                 <androidx.viewpager.widget.ViewPager
                         android:id="@+id/viewPager"
@@ -75,6 +82,7 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

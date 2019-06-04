@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_margin_12dp"
+        android:layout_marginRight="@dimen/activity_margin_12dp"
+        android:layout_marginBottom="@dimen/activity_margin_12dp"
+        app:cardCornerRadius="4dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_user"
+                android:drawablePadding="@dimen/activity_padding_12dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/activity_padding_20dp"
+                android:paddingTop="@dimen/activity_padding_12dp"
+                android:paddingRight="@dimen/activity_padding_20dp"
+                android:paddingBottom="@dimen/activity_padding_12dp" />
+
+        <ImageView
+                android:id="@+id/iv_collect"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginLeft="@dimen/activity_margin_16dp"
+                android:layout_marginRight="@dimen/activity_margin_16dp" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

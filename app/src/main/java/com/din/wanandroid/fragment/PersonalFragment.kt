@@ -34,6 +34,7 @@ class PersonalFragment : BaseFragment() {
         val about = rootView.findViewById<TextView>(R.id.about)
         val logout = rootView.findViewById<TextView>(R.id.logout)
 
+        // 点击事件
         id_layout.setOnClickListener { }
         username_layout.setOnClickListener { }
         email_layout.setOnClickListener { }
@@ -45,31 +46,18 @@ class PersonalFragment : BaseFragment() {
 
         // 点击进行注销
         logout.setOnClickListener {
-            Api.getDefaultService()
-                .logout()
-                .enqueue(object : Callback<String> {
-                    override fun onFailure(call: Call<String>, t: Throwable) {
-                        Toast.makeText(activity, "请求失败", Toast.LENGTH_SHORT).show()
-                    }
+            Api.getDefaultService().logout().enqueue(object : Callback<String> {
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Toast.makeText(activity, "请求失败", Toast.LENGTH_SHORT).show()
+                }
 
-                    override fun onResponse(call: Call<String>, response: Response<String>) {
-                        val json = response.body()
-                        val jsonObject = JSONObject(json)
-                        val errorCode = jsonObject.optInt("errorCode")
-                        val errorMsg = jsonObject.optString("errorMsg")
-                        if (errorCode == 0) {       // 判断服务端是否注销
-                            val isDelete = deleteLoginFile()    // 删除登录记录文件
-                            if (isDelete) {
-                                activity?.let { it1 -> setLoginState(it1, false) } // 删除登录状态信息
-                                startLoginActivity()
-                            }
-                        } else {
-                            Toast.makeText(activity, errorMsg, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    clearLocalLogoutData(response)
+                }
+            })
         }
 
+        // 读取缓存数据
         val userModels = readUser(context!!)
 
         val id = userModels?.get(0)?.id.toString()
@@ -80,6 +68,25 @@ class PersonalFragment : BaseFragment() {
         }
         if (!TextUtils.isEmpty(user)) {
             username.setText(user)
+        }
+    }
+
+    /**
+     * 清楚本地数据
+     */
+    fun clearLocalLogoutData(response: Response<String>) {
+        val json = response.body()
+        val jsonObject = JSONObject(json)
+        val errorCode = jsonObject.optInt("errorCode")
+        val errorMsg = jsonObject.optString("errorMsg")
+        if (errorCode == 0) {                                           // 判断服务端是否注销
+            val isDelete = deleteLoginFile()                            // 删除登录记录文件
+            if (isDelete) {
+                activity?.let { it1 -> setLoginState(it1, false) } // 删除登录状态信息
+                startLoginActivity()
+            }
+        } else {
+            Toast.makeText(activity, errorMsg, Toast.LENGTH_SHORT).show()
         }
     }
 

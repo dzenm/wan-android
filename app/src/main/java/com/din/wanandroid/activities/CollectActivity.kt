@@ -1,43 +1,32 @@
 package com.din.wanandroid.activities
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.din.helper.dialog.InfoDialog
-import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.adapter.CollectAdapter
 import com.din.wanandroid.api.Api
+import com.din.wanandroid.api.ApiServicesHelper
 import com.din.wanandroid.api.CollectHelper
 import com.din.wanandroid.base.BaseActivity
 import com.din.wanandroid.base.BaseAdapter
-import com.din.wanandroid.model.BaseStateModel
 import com.din.wanandroid.model.CollectModel
+import com.dzenm.helper.dialog.InfoDialog
 import kotlinx.android.synthetic.main.activity_collect.*
-import rx.Observer
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
 
-    private var adapter: CollectAdapter = CollectAdapter()      // RecyclerView Adapter
-    private lateinit var promptDialog: PromptDialog             // 加载提示框
-    private var page: Int = 0                                   // 加载的页数
-    private lateinit var infoDialog: InfoDialog
-    private lateinit var beans: MutableList<CollectModel.Datas>
+    private var mAdapter: CollectAdapter = CollectAdapter()      // RecyclerView Adapter
+    private var mPage: Int = 0                                   // 加载的页数
+    private lateinit var mBeans: MutableList<CollectModel.Datas>
 
     override fun layoutId(): Int = R.layout.activity_collect
 
     override fun initialView() {
-
         setToolbar(toolbar)
         // set Adapter
         recycler_view.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        recycler_view.adapter = adapter
-
-        promptDialog = PromptDialog.newInstance(this)
-        infoDialog = InfoDialog.newInstance(this)
+        recycler_view.adapter = mAdapter
 
         recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -47,59 +36,44 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
                     val lastItemPostion = layoutManager.findLastCompletelyVisibleItemPosition()
                     val itemCount = layoutManager.itemCount
                     if (lastItemPostion == (itemCount - 1)) {
-                        adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_LOADING)
-                        fetchListData(lastItemPostion, true)
+                        mAdapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_LOADING)
+                        getCollectArticleData(lastItemPostion, true)
                     }
                 }
             }
         })
         swipe_refresh.setOnRefreshListener {
-            page = 0
+            mPage = 0
             swipe_refresh.isRefreshing = false
-            fetchListData(0, false)
+            getCollectArticleData(0, false)
         }
 
         // RecyclerView Adapter initial
-        adapter.setOnItemClickListener(this)
+        mAdapter.setOnItemClickListener(this)
 
-        fetchListData(0, false)
+        getCollectArticleData(0, false)
     }
 
-    fun fetchListData(lastPostion: Int, isLoadMore: Boolean) {
-        if (!isLoadMore) {
-            promptDialog.showLoadingPoint()
-        }
-        Api.getService()
-            .getCollects(page.toString())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseStateModel<CollectModel>> {
-                override fun onError(e: Throwable?) {}
-
-                override fun onNext(t: BaseStateModel<CollectModel>?) {
-                    if (t!!.errorCode == 0) {
-                        beans = t.data.datas
-                        val pageCount = t.data.pageCount
-                        if (page <= pageCount) {
-                            adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_COMPLETE)
-                            page++
-                        } else {
-                            adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_END)
-                        }
-                        if (isLoadMore) {
-                            adapter.addData(beans, lastPostion)
-                        } else {
-                            adapter.beans = beans
-                            adapter.notifyDataSetChanged()
-                        }
-                        promptDialog.dismiss()
+    fun getCollectArticleData(lastPostion: Int, isLoadMore: Boolean) {
+        ApiServicesHelper<CollectModel>(this)
+            .setOnCallback(object : ApiServicesHelper.OnCallback<CollectModel>() {
+                override fun onNext(data: CollectModel) {
+                    mBeans = data.datas
+                    val pageCount = data.pageCount
+                    if (mPage <= pageCount) {
+                        mAdapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_COMPLETE)
+                        mPage++
                     } else {
-                        Toast.makeText(this@CollectActivity, t.errorMsg, Toast.LENGTH_SHORT).show()
+                        mAdapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_END)
+                    }
+                    if (isLoadMore) {
+                        mAdapter.addData(mBeans, lastPostion)
+                    } else {
+                        mAdapter.mBeans = mBeans
+                        mAdapter.notifyDataSetChanged()
                     }
                 }
-
-                override fun onCompleted() {}
-            })
+            }).request(Api.getService().getCollects(mPage))
     }
 
     /**
@@ -107,24 +81,20 @@ class CollectActivity : BaseActivity(), CollectAdapter.OnItemClickListener {
      */
     override fun onItemClick(bean: CollectModel.Datas, position: Int) {
         val intent = Intent(this, WebActivity::class.java)
-        intent.putExtra("title", bean.title)
-        intent.putExtra("url", bean.link)
+        intent.putExtra(WebActivity.TITLE, bean.title)
+        intent.putExtra(WebActivity.URL, bean.link)
         startActivity(intent)
     }
 
     override fun onItemLongClick(bean: CollectModel.Datas, position: Int) {
-        infoDialog.setInfo("")
-            .setContent("是否取消收藏？")
-            .setOnDialogClickListener { dialog, confirm ->
-                if (confirm) {
-                    CollectHelper.uncollect(this, bean.id)
-                    beans.removeAt(position)
-                    adapter.notifyItemRangeRemoved(position, 1)
-                } else {
-                    dialog.dismiss()
-                }
+        InfoDialog.newInstance(this).setMessage("是否取消收藏？").setOnDialogClickListener { dialog, confirm ->
+            if (confirm) {
+                mAdapter.notifyItemRangeRemoved(position, 1)
+                mBeans.removeAt(position)
+                CollectHelper.uncollect(this, bean.id)
             }
-            .build()
+            dialog.dismiss()
+        }.show()
     }
 
 }

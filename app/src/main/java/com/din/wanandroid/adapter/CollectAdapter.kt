@@ -33,30 +33,33 @@ class CollectAdapter : BaseAdapter<CollectModel.Datas>() {
         if (viewType == ITEM_TYPE_CONTENT) {
             val contentView = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_collect, parent, false)
             return ContentViewHolder(contentView)
+        }else if (viewType == ITEM_TYPE_FOOTER) {
+            val footerView = LayoutInflater.from(parent.context).inflate(R.layout.rv_item_foot, parent, false)
+            return FooterViewHolder(footerView)
         }
         return super.createViewHolder(parent, viewType)
     }
 
-    override fun getItemCount(): Int = beans?.size + ITEM_FOOTER_COUNT ?: 0
+    override fun getItemCount(): Int = mBeans?.size + ITEM_FOOTER_COUNT ?: 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (holder is ContentViewHolder) {
-            if (position >= beans.size) {
+            if (position >= mBeans.size) {
                 return
             }
-            val collectBean = beans?.get(position)
+            val collectBean = mBeans?.get(position)
             holder.title.setText(collectBean.title)
             holder.star.setText(collectBean.zan.toString())
             holder.time.setText(collectBean.niceDate)
             holder.author.setText(collectBean.author)
 
             holder.itemView.setOnClickListener {
-                onItemClickListener?.let { it?.onItemClick(beans.get(position), position) }
+                onItemClickListener?.let { it?.onItemClick(collectBean, position) }
             }
 
             holder.itemView.setOnLongClickListener {
-                onItemClickListener?.let { it?.onItemLongClick(beans.get(position), position) }
+                onItemClickListener?.let { it?.onItemLongClick(collectBean, position) }
                 true
             }
         }

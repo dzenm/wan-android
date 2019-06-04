@@ -9,16 +9,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.din.wanandroid.R
-import com.din.wanandroid.model.*
+import com.din.wanandroid.model.MultipleTitleBean
+import com.din.wanandroid.model.NaviModel
+import com.din.wanandroid.model.NewProjectModel
+import com.din.wanandroid.model.WxModel
 
 /**
  * @author dinzhenyan
  * @date   2019-04-25 21:51
- * @IDE    Android Studio
  */
 class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var beans: MutableList<Any> = mutableListOf()
+    private var mBeans: MutableList<Any> = mutableListOf()
     private var onItemClickListener: OnItemClickListener? = null
     private lateinit var context: Context
 
@@ -35,7 +37,7 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
      * 添加更多的数据
      */
     fun addData(beans: MutableList<Any>) {
-        this.beans = beans
+        mBeans = beans
         notifyDataSetChanged()                  // 添加完数据刷新
     }
 
@@ -43,10 +45,12 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.onItemClickListener = onItemClickListener
     }
 
-    override fun getItemViewType(position: Int): Int = when (beans.get(position)) {
+    /**
+     * 设置多类型的Item
+     */
+    override fun getItemViewType(position: Int): Int = when (mBeans.get(position)) {
         is NewProjectModel.Datas -> TYPE_PROJECT
-        is TreeModel.Data -> TYPE_TREE
-        is WxModel.Data -> TYPE_WX
+        is WxModel -> TYPE_WX
         is NaviModel -> TYPE_NAVI
         is MultipleTitleBean -> TYPE_TITLE
         else -> TYPE_DEFAULT
@@ -59,12 +63,8 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val view = LayoutInflater.from(context).inflate(R.layout.rv_item_multiple_project, parent, false)
                 return ProjectViewHolder(view)
             }
-            TYPE_TREE -> {
-                val view = LayoutInflater.from(context).inflate(0, parent, false)
-                return TreeViewHolder(view)
-            }
             TYPE_WX -> {
-                val view = LayoutInflater.from(context).inflate(0, parent, false)
+                val view = LayoutInflater.from(context).inflate(R.layout.rv_item_multiple_wx, parent, false)
                 return WxViewHolder(view)
             }
             TYPE_NAVI -> {
@@ -82,66 +82,70 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ProjectViewHolder -> {
-                val projectBean = beans.get(position) as NewProjectModel.Datas
-                Glide.with(context).load(projectBean.envelopePic).into(holder.image)
-                holder.title.setText(projectBean.title)
+                val projectModel = mBeans.get(position) as NewProjectModel.Datas
+                Glide.with(context).load(projectModel.envelopePic).into(holder.image)
+                holder.title.setText(projectModel.title)
                 var icon: Int
-                if (projectBean.collect) {
+                if (projectModel.collect) {
                     icon = R.drawable.ic_already_collect
                 } else {
                     icon = R.drawable.ic_no_collect
                 }
                 holder.collect.setImageResource(icon)
 
-                holder.content.setText(projectBean.desc)
-                holder.time.setText(projectBean.niceDate)
-                holder.author.setText(projectBean.author)
-                holder.title.setText(projectBean.title)
+                holder.content.setText(projectModel.desc)
+                holder.time.setText(projectModel.niceDate)
+                holder.author.setText(projectModel.author)
+                holder.title.setText(projectModel.title)
 
                 holder.itemView.setOnClickListener {
                     onItemClickListener?.let { it.onItemClick(position) }
                 }
             }
-
-            is TreeViewHolder -> {
-
-            }
-
             is WxViewHolder -> {
+                val wxModel = mBeans.get(position) as WxModel
+                holder.title.setText(wxModel.name)
 
+                var icon: Int
+                if (wxModel.userControlSetTop) {
+                    icon = R.drawable.ic_already_collect
+                } else {
+                    icon = R.drawable.ic_no_collect
+                }
+                holder.collect.setImageResource(icon)
+
+                holder.itemView.setOnClickListener {
+                    onItemClickListener?.let { it.onItemClick(position) }
+                }
             }
-
             is NaviViewHolder -> {
 
             }
             is TitleViewHolder -> {
-                val titleBean = beans.get(position) as MultipleTitleBean
-                holder.title.setText(titleBean.title)
+                val titleModel = mBeans.get(position) as MultipleTitleBean
+                holder.title.setText(titleModel.title)
                 holder.more.setOnClickListener {
-                    onItemClickListener?.let { it.onItemClick(position ) }
+                    onItemClickListener?.let { it.onItemClick(position) }
                 }
             }
         }
     }
 
-    override fun getItemCount(): Int = beans?.size ?: 0
+    override fun getItemCount(): Int = mBeans?.size ?: 0
 
     class ProjectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image = itemView.findViewById<ImageView>(R.id.image)
-        val title = itemView.findViewById<TextView>(R.id.title)
-        val content = itemView.findViewById<TextView>(R.id.content)
-        val collect = itemView.findViewById<ImageView>(R.id.collect)
-        val time = itemView.findViewById<TextView>(R.id.time)
-        val author = itemView.findViewById<TextView>(R.id.author)
-        val same_project = itemView.findViewById<TextView>(R.id.same_project)
-    }
-
-    class TreeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        val image = itemView.findViewById<ImageView>(R.id.iv_image)
+        val title = itemView.findViewById<TextView>(R.id.tv_title)
+        val content = itemView.findViewById<TextView>(R.id.tv_content)
+        val collect = itemView.findViewById<ImageView>(R.id.iv_collect)
+        val time = itemView.findViewById<TextView>(R.id.tv_time)
+        val author = itemView.findViewById<TextView>(R.id.tv_author)
+        val same_project = itemView.findViewById<TextView>(R.id.tv_same_project)
     }
 
     class WxViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        val title = itemView.findViewById<TextView>(R.id.tv_title)
+        val collect = itemView.findViewById<ImageView>(R.id.iv_collect)
     }
 
     class NaviViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -149,8 +153,8 @@ class MultipleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title = itemView.findViewById<TextView>(R.id.title)
-        val more = itemView.findViewById<TextView>(R.id.more)
+        val title = itemView.findViewById<TextView>(R.id.tv_title)
+        val more = itemView.findViewById<TextView>(R.id.tv_more)
     }
 
     interface OnItemClickListener {

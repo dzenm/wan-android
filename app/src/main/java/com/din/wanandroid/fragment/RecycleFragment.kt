@@ -10,8 +10,8 @@ import com.din.wanandroid.util.RecyclerViewHelper
 
 open abstract class RecycleFragment : BaseFragment(), RecyclerViewHelper.OnScrollLastItemListener {
 
-    protected var page: Int = 0                           // 加载的页数
-
+    protected var mPage: Int = 0                           // 加载的页数
+    protected lateinit var swipe_refresh: SwipeRefreshLayout
 
     /**
      * 滑动刷新
@@ -30,7 +30,7 @@ open abstract class RecycleFragment : BaseFragment(), RecyclerViewHelper.OnScrol
      */
     override fun initiatedView() {
         val recycler_view = rootView.findViewById<RecyclerView>(R.id.recycler_view)
-        val swipe_refresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipe_refresh = rootView.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
 
         onAfterCreateView(rootView)
         // set Adapter
@@ -40,8 +40,7 @@ open abstract class RecycleFragment : BaseFragment(), RecyclerViewHelper.OnScrol
         // initial data
         RecyclerViewHelper(recycler_view).addScrollToLastItemListener(this)
         swipe_refresh.setOnRefreshListener {
-            page = 0
-            swipe_refresh.isRefreshing = false
+            mPage = 0
             swipeRefreshing()
         }
     }

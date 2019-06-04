@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_padding_12dp"
+        android:orientation="vertical">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/activity_padding_12dp">
+
+        <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/activity_margin_16dp"
+                android:layout_marginBottom="@dimen/activity_padding_8dp"
+                android:layout_toLeftOf="@+id/iv_collect"
+                android:textSize="16sp" />
+
+        <ImageView
+                android:id="@+id/iv_collect"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true" />
+
+        <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_title"
+                android:drawableLeft="@drawable/ic_time"
+                android:drawablePadding="@dimen/activity_padding_8dp" />
+
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

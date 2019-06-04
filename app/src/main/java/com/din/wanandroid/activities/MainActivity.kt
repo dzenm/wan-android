@@ -22,7 +22,6 @@ class MainActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     override fun isUseDataBinding(): Boolean = false
 
     override fun initialView() {
-        promptDataBinding.showLoadingPoint()
         fragments = mutableListOf()
 
         homeFragment = HomeFragment()

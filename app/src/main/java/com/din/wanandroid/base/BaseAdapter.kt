@@ -22,7 +22,7 @@ abstract class BaseAdapter<T : Any> : RecyclerView.Adapter<RecyclerView.ViewHold
         const val LOAD_STATUS_END = 3               // 加载的状态为全部加载完
     }
 
-    var beans: MutableList<T> = arrayListOf()       // list数据源
+    var mBeans: MutableList<T> = arrayListOf()       // list数据源
 
     var loadStatus = 0                              // 加载的状态标志位
 
@@ -30,15 +30,15 @@ abstract class BaseAdapter<T : Any> : RecyclerView.Adapter<RecyclerView.ViewHold
      * 设置底部加载的状态
      */
     fun setLoadingStatus(status: Int) {
-        this.loadStatus = status
-        notifyItemRangeChanged(beans.size, 1)
+        loadStatus = status
+        notifyItemRangeChanged(mBeans.size, 1)
     }
 
     /**
      * 添加更多的数据
      */
     fun addData(articleBeans: MutableList<T>, position: Int) {
-        this.beans?.addAll(articleBeans)
+        mBeans?.addAll(articleBeans)
         notifyItemRangeInserted(position + 1, articleBeans.size)    // 添加完数据刷新
     }
 
@@ -76,7 +76,7 @@ abstract class BaseAdapter<T : Any> : RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    override fun getItemCount(): Int = beans?.size + ITEM_FOOTER_COUNT ?: 0
+    override fun getItemCount(): Int = mBeans?.size + ITEM_FOOTER_COUNT ?: 0
 
     /**
      * 判断Item的类型
@@ -112,7 +112,7 @@ abstract class BaseAdapter<T : Any> : RecyclerView.Adapter<RecyclerView.ViewHold
      * 加载错误的状态
      */
     fun setErrorState(holder: ErrorViewHolder, position: Int) {
-        val error = beans[position] as Error
+        val error = mBeans[position] as Error
         holder.image.setImageResource(error.image)
         holder.title.setText(error.title)
     }
@@ -121,7 +121,7 @@ abstract class BaseAdapter<T : Any> : RecyclerView.Adapter<RecyclerView.ViewHold
      * 加载空数据的状态
      */
     fun setEmptyState(holder: EmptyViewHolder, position: Int) {
-        val empty = beans[position] as Empty
+        val empty = mBeans[position] as Empty
         holder.image.setImageResource(empty.image)
         holder.title.setText(empty.title)
     }

@@ -39,16 +39,38 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
+    // banner图片
     implementation project(':banner')
-    implementation project(':helper')
+
+    // androidx
     implementation 'androidx.core:core-ktx:1.0.0-alpha1'
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
+
+    // viewPager2
+    implementation 'androidx.viewpager2:viewpager2:1.0.0-alpha04'
+
+    // retrofit add rxjava2 adapter and gson adapter
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    // okhttp add cookie
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+
+    // gson
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'io.reactivex:rxandroid:1.2.1'
+
+    // rxandroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    // 图片加载glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    // helper
+    implementation 'com.github.dzenm:helper:1.2.1'
+
+    // 流式布局
+    implementation 'com.google.android:flexbox:1.1.0'
+
 }

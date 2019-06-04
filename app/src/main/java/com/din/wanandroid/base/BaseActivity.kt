@@ -9,19 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.din.helper.dialog.PromptDialog
-import com.din.helper.screen.ScreenHelper
+import com.dzenm.helper.screen.ScreenHelper
 
 /**
  * @author dinzhenyan
  * @date   2019-04-25 16:42
- * @IDE    Android Studio
  */
 abstract class BaseActivity : AppCompatActivity() {
 
     protected var dataBinding: ViewDataBinding? = null
-    lateinit var promptDataBinding: PromptDialog
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +27,6 @@ abstract class BaseActivity : AppCompatActivity() {
             setContentView(layoutId())
         }
 
-        promptDataBinding = PromptDialog.newInstance(this)
         initialView()
     }
 
@@ -99,7 +94,7 @@ abstract class BaseActivity : AppCompatActivity() {
         val view = currentFocus
         view?.let {
             val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            manager?.hideSoftInputFromWindow(it.windowToken, 0)
+            manager.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 }

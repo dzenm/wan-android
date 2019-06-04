@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * @author dinzhenyan
  * @date 2019-04-30 20:36
- * @IDE Android Studio
  *
  * RecyclerView的一些常用设置的工具类
  */

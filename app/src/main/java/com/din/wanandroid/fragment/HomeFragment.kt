@@ -5,174 +5,132 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.din.banner.limited.ScrollerPage
 import com.din.wanandroid.R
-import com.din.wanandroid.activities.MainActivity
 import com.din.wanandroid.activities.WebActivity
 import com.din.wanandroid.adapter.ArticleAdapter
 import com.din.wanandroid.api.Api
+import com.din.wanandroid.api.ApiServicesHelper
 import com.din.wanandroid.api.CollectHelper
 import com.din.wanandroid.base.BaseAdapter
 import com.din.wanandroid.model.ArticleModel
 import com.din.wanandroid.model.BannerModel
-import com.din.wanandroid.model.BaseStateModel
 import com.din.wanandroid.model.TopModel
-import rx.Observer
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
     BaseAdapter.OnItemClickListener<ArticleModel.Datas> {
 
-    private var adapter: ArticleAdapter = ArticleAdapter()       // RecyclerView Adapter
+    private var mAdapter: ArticleAdapter = ArticleAdapter()       // RecyclerView Adapter
 
-    private var bannerUrls: MutableList<String> = mutableListOf()
-    private var bannerImages: MutableList<String> = mutableListOf()
+    private var mBannerUrls: MutableList<String> = mutableListOf()
+    private var mBannerImages: MutableList<String> = mutableListOf()
 
-    private lateinit var scrollerPage: ScrollerPage
-    private lateinit var coordinator_layout: CoordinatorLayout
-    private var isFirstStart = true
+    private lateinit var mScrollerPage: ScrollerPage             // Banner图片
+    private var isFirstStart = true                             // 是否是第一次启动
 
     override fun layoutId(): Int = R.layout.fragment_home
 
-    override fun setAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder> = adapter
+    override fun setAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder> = mAdapter
 
     override fun onAfterCreateView(view: View) {
         val search_view = view.findViewById<SearchView>(R.id.search_view)
 
+        // 与Banner图片显示相关
         val viewPager = view.findViewById(R.id.viewPager) as ViewPager
         val ll_point = view.findViewById(R.id.ll_point) as LinearLayout
         val iv_point = view.findViewById(R.id.iv_point) as ImageView
-        coordinator_layout = view.findViewById(R.id.coordinator_layout)
 
         // Banner图初始化
-        scrollerPage = ScrollerPage()
-            .with(activity)
-            .init(viewPager, ll_point, iv_point)
-            .setItemClickListener {
-                val intent = Intent(activity, WebActivity::class.java)
-                intent.putExtra("title", bannerUrls.get(it))
-                intent.putExtra("url", bannerUrls.get(it))
-                startActivity(intent)
-            }
+        mScrollerPage = ScrollerPage().with(activity).init(viewPager, ll_point, iv_point).setItemClickListener {
+            val intent = Intent(activity, WebActivity::class.java)
+            intent.putExtra(WebActivity.TITLE, mBannerUrls.get(it))
+            intent.putExtra(WebActivity.URL, mBannerUrls.get(it))
+            startActivity(intent)
+        }
 
         // RecyclerView Adapter initial
-        adapter.setOnItemClickListener(this)
+        mAdapter.setItemOnClickListener(this)
 
         // search view initial
         search_view.setIconifiedByDefault(false)     // 设置搜索框直接展开显示。左侧有放大镜(在搜索框外) 右侧无叉叉 有输入内容后有叉叉 不能关闭搜索框
-        search_view.queryHint = getString(R.string.search_query_hint)   // 设置输入框提示语
+        search_view.queryHint = getString(R.string.search_query_hint)      // 设置输入框提示语
         search_view.setOnQueryTextListener(this)
         isFirstStart = false
-        fetchData()
+        swipe_refresh.isRefreshing = true
+        getBannerData()                              // 加载banner图片数据
     }
 
     override fun onLastItem(lastPosition: Int) {
-        adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_LOADING)
-        fetchListData(lastPosition, true)
+        mAdapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_LOADING)
+        getArticleListData(lastPosition, true)
     }
 
     override fun swipeRefreshing() {
-        fetchListData(0, false)
+        getArticleListData(0, false)
     }
 
-    fun fetchData() {
-        // 获取banner图
-        Api.getService()
-            .getBanner()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseStateModel<MutableList<BannerModel>>> {
-                override fun onError(e: Throwable?) {
-                }
-
-                override fun onNext(t: BaseStateModel<MutableList<BannerModel>>?) {
-                    if (t!!.errorCode == 0) {
-                        val datas = t.data
-                        for (i in datas.indices) {
-                            bannerImages.add(datas.get(i).imagePath)
-                            bannerUrls.add(datas.get(i).url)
-                        }
-                        scrollerPage.setImage(bannerImages.toTypedArray()).start()
-                        fetchListData(0, false)
+    fun getBannerData() {
+        // 获取banner图片
+        ApiServicesHelper<MutableList<BannerModel>>(activity as AppCompatActivity)
+            .setOnCallback(object : ApiServicesHelper.OnCallback<MutableList<BannerModel>>() {
+                override fun onNext(data: MutableList<BannerModel>) {
+                    for (i in data.indices) {
+                        mBannerImages.add(data.get(i).imagePath)
+                        mBannerUrls.add(data.get(i).url)
                     }
+                    // 设置banner图片显示
+                    iv_empty_pic.visibility = View.GONE
+                    mScrollerPage.setImage(mBannerImages.toTypedArray()).start()
+                    getArticleListData(0, false)
                 }
-
-                override fun onCompleted() {
-                }
-            })
+            }).request(Api.getService().getBanner())
     }
 
     /**
-     * 拉取置顶数据
+     * 获取置顶数据
      */
-    fun fetchTopData() {
-        Api.getService()
-            .getTop()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseStateModel<MutableList<TopModel>>> {
-                override fun onError(e: Throwable?) {
-                }
-
-                override fun onNext(t: BaseStateModel<MutableList<TopModel>>?) {
+    fun getTopArticleData() {
+        ApiServicesHelper<MutableList<TopModel>>(activity as AppCompatActivity)
+            .setOnCallback(object : ApiServicesHelper.OnCallback<MutableList<TopModel>>() {
+                override fun onNext(data: MutableList<TopModel>) {
                     if (isFirstStart) {
-                        if (t!!.errorCode == 0) {
-                            val datas = t.data
-//                            adapter.bean = datas
-                            adapter.notifyDataSetChanged()
-                            coordinator_layout.visibility = View.VISIBLE
-                        } else {
-                            Toast.makeText(activity, t.errorMsg, Toast.LENGTH_SHORT).show()
-                        }
+//                    mAdapter.bean = data
+                        mAdapter.notifyDataSetChanged()
                     }
                 }
-
-                override fun onCompleted() {
-                }
-            })
+            }).request(Api.getService().getTop())
     }
 
     /**
-     * 拉取列表数据
+     * 获取列表数据
      */
-    fun fetchListData(lastPostion: Int, isLoadMore: Boolean) {
-        Api.getService()
-            .getArticle(page.toString())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<BaseStateModel<ArticleModel>> {
-                override fun onError(e: Throwable?) {}
-
-                override fun onNext(t: BaseStateModel<ArticleModel>?) {
-                    if (t!!.errorCode == 0) {
-                        val datas = t.data.datas
-                        val pageCount = t.data.pageCount
-                        if (page <= pageCount) {
-                            adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_COMPLETE)
-                            page++
-                        } else {
-                            adapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_END)
-                        }
-                        if (isLoadMore) {
-                            adapter.addData(datas, lastPostion)
-                        } else {
-                            adapter.beans = datas
-                            adapter.notifyDataSetChanged()
-                            coordinator_layout.visibility = View.VISIBLE
-                            (activity as MainActivity).promptDataBinding.dismiss()
-                        }
+    fun getArticleListData(lastPostion: Int, isLoadMore: Boolean) {
+        ApiServicesHelper<ArticleModel>(activity as AppCompatActivity)
+            .setOnCallback(object : ApiServicesHelper.OnCallback<ArticleModel>() {
+                override fun onNext(data: ArticleModel) {
+                    val datas = data.datas
+                    val pageCount = data.pageCount
+                    if (mPage <= pageCount) {
+                        mAdapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_COMPLETE)
+                        mPage++
                     } else {
-                        Toast.makeText(activity, t.errorMsg, Toast.LENGTH_SHORT).show()
+                        mAdapter.setLoadingStatus(BaseAdapter.LOAD_STATUS_END)
+                    }
+                    if (isLoadMore) {
+                        mAdapter.addData(datas, lastPostion)
+                    } else {
+                        mAdapter.mBeans = datas
+                        mAdapter.notifyDataSetChanged()
+                        swipe_refresh.isRefreshing = false
+                        recycler_view.visibility = View.VISIBLE
                     }
                 }
-
-                override fun onCompleted() {}
-            })
+            }).request(Api.getService().getArticle(mPage))
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -190,11 +148,14 @@ class HomeFragment : RecycleFragment(), SearchView.OnQueryTextListener,
      */
     override fun onItemClick(bean: ArticleModel.Datas, position: Int) {
         val intent = Intent(activity, WebActivity::class.java)
-        intent.putExtra("title", bean.title)
-        intent.putExtra("url", bean.link)
+        intent.putExtra(WebActivity.TITLE, bean.title)
+        intent.putExtra(WebActivity.URL, bean.link)
         startActivity(intent)
     }
 
+    /**
+     * 收藏点击事件
+     */
     override fun onItemCollectClick(bean: ArticleModel.Datas, position: Int) {
         if (bean.collect) {
             activity?.let { CollectHelper.uncollect(it, bean.id) }

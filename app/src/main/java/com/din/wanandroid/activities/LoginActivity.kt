@@ -6,13 +6,14 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.din.helper.dialog.PromptDialog
 import com.din.wanandroid.R
 import com.din.wanandroid.api.Api
 import com.din.wanandroid.model.UserModel
 import com.din.wanandroid.util.getLoginState
 import com.din.wanandroid.util.setLoginState
 import com.din.wanandroid.util.writeUser
+import com.dzenm.helper.dialog.PromptDialog
+import com.dzenm.helper.log.Logger
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 import retrofit2.Call
@@ -29,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         if (getLoginState(this)) {       // 判断是否登录
+            Logger.i(this::class.java.simpleName + "已登录过，自动跳转到首页")
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

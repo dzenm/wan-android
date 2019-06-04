@@ -12,10 +12,10 @@ import com.din.wanandroid.model.ArticleModel
 
 class ArticleAdapter : BaseAdapter<ArticleModel.Datas>() {
 
-    private lateinit var onItemClickListener: OnItemClickListener<ArticleModel.Datas>       // 点击事件
+    private lateinit var mOnItemClickListener: OnItemClickListener<ArticleModel.Datas>
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener<ArticleModel.Datas>) {
-        this.onItemClickListener = onItemClickListener
+    fun setItemOnClickListener(onItemClickListener: OnItemClickListener<ArticleModel.Datas>) {
+        mOnItemClickListener = onItemClickListener
     }
 
     inner class ContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,13 +40,13 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Datas>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (holder is ContentViewHolder) {
-            if (position >= beans.size) {
+            if (position >= mBeans.size) {
                 return
             }
-            val articleBean = beans?.get(position)
+            val articleBean = mBeans.get(position) as ArticleModel.Datas
             holder.title.setText(articleBean.title)
-            var icon: Int
 
+            var icon: Int
             if (articleBean.collect) {
                 icon = R.drawable.ic_already_collect
             } else {
@@ -59,11 +59,11 @@ class ArticleAdapter : BaseAdapter<ArticleModel.Datas>() {
             holder.author.setText(articleBean.author)
 
             holder.collect.setOnClickListener {
-                onItemClickListener?.onItemCollectClick(beans.get(position), position)
+                mOnItemClickListener?.onItemCollectClick(articleBean, position)
                 notifyItemChanged(position)
             }
             holder.itemView.setOnClickListener {
-                onItemClickListener?.onItemClick(beans.get(position), position)
+                mOnItemClickListener?.onItemClick(articleBean, position)
             }
         }
     }
