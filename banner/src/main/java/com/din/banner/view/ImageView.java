@@ -10,7 +10,7 @@ import android.util.TypedValue;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import com.din.banner.R;
+import com.dzenm.banner.R;
 
 /**
  * @author dinzhenyan

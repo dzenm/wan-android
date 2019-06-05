@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
-import com.din.banner.R;
+import com.dzenm.banner.R;
 
 public class ScrollerPage extends RelativeLayout implements ViewPager.OnPageChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
 

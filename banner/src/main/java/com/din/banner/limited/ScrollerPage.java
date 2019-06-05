@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
-import com.din.banner.R;
+import com.dzenm.banner.R;
 
 import java.util.ArrayList;
 import java.util.List;
